@@ -64,7 +64,7 @@ $aBuf = [IO.File]::ReadAllBytes($aPath)
 $hCount = [BitConverter]::ToUInt16($hBuf, 4)
 $hBase = 6 + $hCount * 2
 $hMap = @{}
-for ($i = 0; $i -lt $hCount; $i++) { $hMap[[BitConverter]::ToUInt16($hBuf, 6 + $i * 2)] = $i }
+for ($i = 0; $i -lt $hCount; $i++) { $hMap[[int][BitConverter]::ToUInt16($hBuf, 6 + $i * 2)] = $i }
 
 # ---------------- framebuffer（1 = 黑）----------------
 function New-Fb { return [byte[]]::new($script:PSTRIDE * $script:PH) }

@@ -46,7 +46,7 @@ $aBuf = [IO.File]::ReadAllBytes((Join-Path $fontDir 'ascii8x16.bin'))
 $hCount = [BitConverter]::ToUInt16($hBuf, 4)
 $hBase = 6 + $hCount * 2
 $hMap = @{}
-for ($i = 0; $i -lt $hCount; $i++) { $hMap[[BitConverter]::ToUInt16($hBuf, 6 + $i * 2)] = $i }
+for ($i = 0; $i -lt $hCount; $i++) { $hMap[[int][BitConverter]::ToUInt16($hBuf, 6 + $i * 2)] = $i }
 
 # ================== 画布（整张对照图共用一个 1-bit 缓冲） ==================
 $COLS = 4; $ROWS = 3
