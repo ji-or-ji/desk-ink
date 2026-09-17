@@ -6,10 +6,11 @@
 #include "esp_err.h"
 
 /*
- * eink — 墨水屏（SSD1680）
+ * eink — 墨水屏（DEPG0420BNS19AF0，SSD1619AZ）
  *
  * 第一阶段只实现 framebuffer 与绘制原语，SPI 初始化/刷新留到第二阶段。
  * framebuffer 约定：1 bit/像素，1 = 黑，0 = 白，行优先，每行 50 字节。
+ * ⚠️ 面板 RAM 极性相反（面板 1 = 白），刷屏那一层需要取反，见 software-notes.md。
  */
 
 #define EINK_WIDTH      400
@@ -30,6 +31,9 @@ void fb_draw_vline(int x, int y0, int y1, bool black);
 void fb_draw_rect(int x, int y, int w, int h, bool black, bool fill);
 void fb_blit_1bit(const uint8_t *data, int x, int y, int w, int h, bool invert);
 
-/* ---------- 刷新（第二阶段实现） ---------- */
+/* ---------- 刷新（第二阶段） ---------- */
 esp_err_t eink_flush_full(void);
 esp_err_t eink_flush_partial(int x, int y, int w, int h);
+
+/* 主控深睡前调用：让面板进入深睡（0x10 ← 0x01） */
+esp_err_t eink_sleep(void);
