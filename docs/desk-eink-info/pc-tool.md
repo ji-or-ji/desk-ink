@@ -107,12 +107,28 @@ ClassIsland ──IPC──▶ 本工具 ──SerialPort──▶ 蓝牙 SPP �
 
 ---
 
-## 七、待定
+## 七、待定与已定
 
-1. **待办推送的入口**：`protocol.md` 已定"做"（PC 推中文待办），但具体交互放在设置页还是管理页
-2. **开机自启**：注册表 Run 项 vs 启动文件夹
-3. **是否需要「手动推送测试」按钮**：调试期很有用
-4. **观感细节**：沿用 Fluent 默认，还是自定义配色
+> 更新：2026-09-17（第一轮实现后）
+
+### 已定
+
+1. **待办推送的入口**：推送开关放**设置页**（`PushTodo`），管理页只读展示。
+2. **开机自启**：注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`，值名 `DeskInk.PcTool`。
+3. **「手动推送测试」按钮**：已做，在管理页右上。
+4. **每日一言来源**：默认走**公益源**（一言 hitokoto，`https://v1.hitokoto.cn/`）；设置页可切换
+   「手动填写 / 自定义网址 / 本地文件」。每天取一条（跨天自动刷新），可点「立即获取」。
+   联网失败时用内置备用文案兜底，不阻塞推送。设置项：`PushQuote` / `QuoteSource` /
+   `QuoteUrl` / `QuoteFile` / `Quote`。
+5. **插画上传**：已做，规格见 `变更-插画-PC端.md`，界面在新增的「插画」页。
+   缩放方式默认改为**手动裁剪**（拖动方框选位置、拖角按目标比例缩放），另保留「拉伸 / 留白」；
+   裁剪框以归一化坐标随图保存。原文档默认的「Cover 居中裁剪」被手动裁剪取代。
+
+### 仍待定
+
+1. **观感细节**：沿用 Fluent 默认，还是自定义配色
+2. **插画抹除**：`protocol.md` 没有删除消息，等固件侧方案定了再补
+3. **插画 id 同步**：设备端不回报已有列表，PC 本地自增 id 可能与设备失步（已知限制）
 
 ---
 
@@ -126,13 +142,19 @@ ClassIsland ──IPC──▶ 本工具 ──SerialPort──▶ 蓝牙 SPP �
 - 位置：`desk-ink/pc-tool/`
 - 目标框架：`net8.0-windows10.0.19041.0`
 - 未打包（unpackaged）：`<WindowsPackageType>None</WindowsPackageType>`
-- 需要的 NuGet 包：
-  - `Microsoft.WindowsAppSDK`（WinUI 3）
-  - `ClassIsland.Shared.Ipc`（读课表）
-  - `System.IO.Ports`（串口）
-  - `H.NotifyIcon.WinUI`（托盘）
+- 需要的 NuGet 包（实际锁定版本）：
+  - `Microsoft.WindowsAppSDK` **1.8.260804001**（WinUI 3）
+  - `ClassIsland.Shared.Ipc` **2.1.0.1**（读课表）
+  - `System.IO.Ports` 8.0.0（串口）
+  - `System.Drawing.Common` 9.0.1（插画图像处理）
+  - `H.NotifyIcon.WinUI` 2.3.2（托盘）
+
+> **WindowsAppSDK 必须 ≥ 1.7**。1.6 的 `MrtCore.PriGen.targets` 在 `PrepareForRun` 阶段会调用
+> VS 的 `Microsoft.Build.Packaging.Pri.Tasks.dll` / `Microsoft.Build.AppxPackage.dll`，
+> 没装 VS 时以 `MSB4062` 失败（且 XamlCompiler 会先静默 exit 1）。1.8 的命令行构建干净通过。
 
 > WinUI 3 的项目模板不一定在命令行可用。**能装模板就装**（`dotnet new install` 搜 `WindowsAppSDK` 相关），**装不上就手写** `csproj` + `App.xaml` + `MainWindow.xaml`，不难。
+> 本项目即手写；`H.NotifyIcon` 在 WinUI 下的托盘菜单属性是 `ContextFlyout`（不是 WPF 的 `ContextMenu`）。
 
 ### 第二步：跑通 IPC
 
@@ -158,4 +180,6 @@ ClassIsland ──IPC──▶ 本工具 ──SerialPort──▶ 蓝牙 SPP �
 | `pc-tool.md`（本文） | 技术选型与界面结构 |
 | `classisland-link.md` | IPC 接口与数据模型 |
 | `protocol.md` | 发给 ESP32 的消息格式 |
+| `变更-插画-PC端.md` | 插画上传（图像预处理 + 分片）规格 |
+| `轮换与插画.md` | 小窗内容池与插画显示模式 |
 | `docs/refs/ClassIsland.Shared.IPC-2.1.0.1.xml` | 接口原文（备查） |

@@ -1,0 +1,17 @@
+# ============================================================
+# QEMU 仿真专用覆盖配置
+# ============================================================
+#
+# 正常固件：日志走 USB Serial/JTAG（因为 UART0/GPIO20·21 让给了 VG6328A 蓝牙）
+# 但 QEMU 只把 UART0 接到 stdio，USB-Serial-JTAG 的输出看不到。
+# 所以仿真时把日志改回 UART0，其余照旧。
+#
+# 用法（独立 build 目录，不动主构建）：
+#
+#   idf.py -B build-qemu -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.qemu.defaults" qemu
+#
+# 用途：跑通后再看固件里 dump_fb_ascii() 打出的 framebuffer，
+#       就能在没有硬件的情况下验证渲染效果。
+
+# CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG is not set
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y

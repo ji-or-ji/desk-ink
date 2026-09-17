@@ -198,6 +198,24 @@ void ui_render_pomo(int seconds_left); // 小窗番茄钟
 void ui_render_menu(int cursor);              // 菜单叠加层：番茄钟 / 配置 / 取消
 void ui_render_config(int item, int value);   // 配置页：当前项 + 当前值
 
+// 内容池（小窗轮换）：顺序固定 新闻 → 一言 → 插画（按 id 升序）
+void ui_pool_clear(void);
+void ui_pool_set_text(ui_panel_kind_t kind, const char *title, const char *body);
+void ui_pool_set_images(const int *ids, int count);
+int  ui_pool_count(void);
+int  ui_pool_current(void);
+void ui_pool_set_current(int index);
+void ui_pool_move(int delta);
+
+// 插画绘制（从 LittleFS 读裸位图，按长度判尺寸）
+void ui_draw_image_full(int image_id);   // 400×300
+void ui_draw_image_panel(int image_id);  // 134×200
+
+// 数据/模式注入
+void ui_set_clock(int hour, int minute); // 信息条用；未知传 -1
+void ui_set_art_mode(int mode);          // 0 全屏 / 1 小窗
+void ui_set_bar_mode(int mode);          // ui_bar_mode_t
+
 // 局部重绘入口，避免整屏重画
 void ui_redraw_schedule(void);
 void ui_redraw_todo(int cursor);
@@ -209,6 +227,7 @@ void ui_redraw_panel(void);
 - 只负责往 framebuffer 画，不碰 SPI
 - 画完由 `app_task` 决定整屏还是局部 `eink_flush_*`
 - 布局坐标见 `ui-spec.md`；`ui_render_config` 的 item 取值见 `ui_config_item_t`，语义见 `ui-states.md` 附节
+- 内容池与信息条设计见 `变更-显示侧.md` / `轮换与插画.md`
 
 ---
 
