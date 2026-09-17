@@ -1,0 +1,8 @@
+# 桌面墨水屏信息站 — 分区表（4MB flash）
+# 布局依据 architecture.md 第六节：app 1.5MB + LittleFS ~2.4MB
+#
+# Name,     Type, SubType, Offset,   Size,     Flags
+nvs,        data, nvs,     0x9000,   0x6000,
+phy_init,   data, phy,     0xF000,   0x1000,
+factory,    app,  factory, 0x10000,  0x180000,
+littlefs,   data, spiffs,  0x190000, 0x270000,

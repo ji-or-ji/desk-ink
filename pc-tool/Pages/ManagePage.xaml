@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="DeskInk.PcTool.Pages.ManagePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:DeskInk.PcTool.Models"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="16" />
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel Padding="24" Spacing="16">
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="运行状态" />
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="ClassIsland" />
+                        <TextBlock x:Name="IpcStatusText" Style="{StaticResource SubtitleTextBlockStyle}" Text="未连接" />
+                        <TextBlock x:Name="IpcDetailText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="等待 IPC" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource CardStyle}">
+                    <StackPanel Spacing="4">
+                        <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="串口" />
+                        <TextBlock x:Name="SerialStatusText" Style="{StaticResource SubtitleTextBlockStyle}" Text="未打开" />
+                        <TextBlock x:Name="SerialDetailText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="未选择端口" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="当前课表" />
+
+            <Border Style="{StaticResource CardStyle}">
+                <Grid ColumnSpacing="24" RowSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="当前" />
+                        <TextBlock x:Name="CurrentSubjectText" FontSize="30" FontWeight="SemiBold" Text="—" />
+                        <TextBlock x:Name="CurrentRangeText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="—" />
+                        <TextBlock x:Name="CurrentLeftText" Text="剩余 —" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Spacing="4">
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="下一节" />
+                        <TextBlock x:Name="NextSubjectText" FontSize="30" FontWeight="SemiBold" Text="—" />
+                        <TextBlock x:Name="NextRangeText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="—" />
+                        <TextBlock x:Name="StateText" Text="状态：无" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid>
+                <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="推送日志" />
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="12">
+                    <TextBlock x:Name="PushCountText" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="已推送 0 条" />
+                    <Button Click="TestPushButton_Click" Content="手动推送测试" />
+                </StackPanel>
+            </Grid>
+
+            <Border Style="{StaticResource CardStyle}">
+                <ListView x:Name="LogList" MaxHeight="340" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="models:LogEntry">
+                            <Grid ColumnSpacing="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    FontFamily="Consolas"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{x:Bind TimeText}" />
+                                <TextBlock Grid.Column="1" Text="{x:Bind LevelText}" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Text="{x:Bind Message}"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

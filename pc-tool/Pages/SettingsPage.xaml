@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="DeskInk.PcTool.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="Padding" Value="16" />
+        </Style>
+    </Page.Resources>
+
+    <ScrollViewer>
+        <StackPanel Padding="24" Spacing="16">
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="串口" />
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="12">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <ComboBox x:Name="PortCombo" MinWidth="220" PlaceholderText="选择串口" />
+                        <Button Click="RefreshPorts_Click" Content="刷新" />
+                        <Button Click="OpenPort_Click" Content="打开" />
+                    </StackPanel>
+                    <ToggleSwitch x:Name="AutoDetectSwitch" Header="自动发现端口（仅一个 COM 口时自动打开）" />
+                    <TextBlock x:Name="PortHintText" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="推送策略" />
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="12">
+                    <ToggleSwitch x:Name="PushOnEventSwitch" Header="事件触发推送（上课 / 课间 / 放学 / 时间点变化）" />
+                    <ToggleSwitch x:Name="PeriodicSwitch" Header="定时补推" />
+                    <NumberBox
+                        x:Name="PeriodicSecondsBox"
+                        Header="补推间隔（秒）"
+                        Maximum="3600"
+                        Minimum="10"
+                        SpinButtonPlacementMode="Compact" />
+                    <ToggleSwitch x:Name="PushTodoSwitch" Header="随课表推送待办" />
+                    <TextBox
+                        x:Name="QuoteBox"
+                        AcceptsReturn="True"
+                        Header="每日一言（留空则不推送）"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="启动" />
+            <Border Style="{StaticResource CardStyle}">
+                <ToggleSwitch x:Name="AutoStartSwitch" Header="开机自启（注册表 Run 项）" />
+            </Border>
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Button Click="Save_Click" Content="保存" Style="{StaticResource AccentButtonStyle}" />
+                <TextBlock x:Name="SavedText" VerticalAlignment="Center" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

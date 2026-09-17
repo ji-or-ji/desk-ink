@@ -1,0 +1,13 @@
+<mxfile host="Electron">
+  <diagram name="第 1 页" id="Z5OQ-qzCjOfvDC4t7Tso">
+    <mxGraphModel dx="438" dy="307" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="qSBXAAPrRUo4HKyS3fTF-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="ESP32-C3&lt;div&gt;Dev&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="60" width="120" x="520" y="310" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

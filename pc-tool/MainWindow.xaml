@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="DeskInk.PcTool.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tb="using:H.NotifyIcon"
+    mc:Ignorable="d"
+    Title="DeskInk 课表推送">
+
+    <Grid>
+        <NavigationView
+            x:Name="Nav"
+            IsBackButtonVisible="Collapsed"
+            IsSettingsVisible="False"
+            OpenPaneLength="180"
+            PaneDisplayMode="Left"
+            SelectionChanged="Nav_SelectionChanged">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="管理" Tag="manage" IsSelected="True">
+                    <NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Home" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="设置" Tag="settings">
+                    <NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Setting" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <Frame x:Name="ContentFrame" />
+        </NavigationView>
+
+        <tb:TaskbarIcon
+            x:Name="TrayIcon"
+            MenuActivation="RightClick"
+            NoLeftClickDelay="True"
+            ToolTipText="DeskInk 课表推送">
+            <tb:TaskbarIcon.IconSource>
+                <tb:GeneratedIconSource
+                    x:Name="TrayIconSource"
+                    FontSize="40"
+                    Text="…">
+                    <tb:GeneratedIconSource.Foreground>
+                        <SolidColorBrush Color="Gray" />
+                    </tb:GeneratedIconSource.Foreground>
+                </tb:GeneratedIconSource>
+            </tb:TaskbarIcon.IconSource>
+            <tb:TaskbarIcon.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Click="TrayOpenManage_Click" Text="打开管理页" />
+                    <MenuFlyoutItem Click="TrayOpenSettings_Click" Text="打开设置" />
+                    <MenuFlyoutSeparator />
+                    <MenuFlyoutItem Click="TrayExit_Click" Text="退出" />
+                </MenuFlyout>
+            </tb:TaskbarIcon.ContextFlyout>
+        </tb:TaskbarIcon>
+    </Grid>
+</Window>
