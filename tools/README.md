@@ -65,3 +65,35 @@
 | 抖动矩阵 | 4×4 Bayer，判定 `灰度 < (矩阵值 + 0.5) / 16 × 255` |
 
 > ⚠️ 面板 RAM 的极性是反的（1 = 白），刷屏那一层要取反。见 `software-notes.md`。
+
+---
+
+## `render-states.ps1`
+
+把固件 `ui.c` 的**各个界面状态**画成一张对照图（默认 4×3 共 12 格）。
+
+用途：不用读代码、也不用硬件，一眼看清**已经实现到什么程度**。
+
+```powershell
+.\render-states.ps1 -Photo D:\pic.jpg -Out states.png
+```
+
+它覆盖的状态：
+
+| # | 状态 |
+|---|---|
+| ① ② | IDLE · 每日一言 / 新闻 |
+| ③ | IDLE · 插画（小窗） |
+| ④ ⑤ ⑥ | IDLE · 全屏插画 · 信息条（实心 / 反色 / 自适应） |
+| ⑦ | IDLE · 内容池为空 |
+| ⑧ | MENU |
+| ⑨ | CONFIG（反白值块） |
+| ⑩ ⑪ | TODO_NAV / TODO_EDIT |
+| ⑫ | POMO |
+
+**这是 ui.c 的忠实移植**：布局常量、绘制原语（`fb_*`）、字模绘制、`ui_render_*` 的
+坐标与文案，全部照 `software/components/ui/ui.c` 抄；取数与 `app.c` 的
+`seed_placeholder_data()` 一致。
+
+> 注意边界：它是**移植**，不是编译产物。用来对「实现了几分」够用；
+> 要验证真代码，走 `docs/desk-eink-info/qemu-验证.md` 那条路。
