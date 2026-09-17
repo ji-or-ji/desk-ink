@@ -101,3 +101,26 @@ ASCII 打到日志，那就是**真代码渲染出来的画面**。
 |---|---|---|
 | `tools/render-preview.ps1` | 版面、算法、字模、信息条三模式 | 它是**复刻**，不是真代码 |
 | QEMU + `dump_fb_ascii` | **真 C 代码**的渲染结果 | 需要把上面的配方跑通 |
+
+---
+
+## 七、本机实测：QEMU 跑不起来（2026-09-17）
+
+按第四节配方构建 `build-qemu` **成功**（bin 0x70820），但 `idf.py qemu` 无任何输出即退出。
+
+直接执行 QEMU 得到退出码 **`-1073741515` = `0xC0000135` (STATUS_DLL_NOT_FOUND)**。
+
+```
+C:\Espressif\tools\qemu-riscv32\esp_develop_9.2.2_20250817\qemu\
+  bin\  qemu-system-riscv32.exe / qemu-system-riscv32w.exe   ← 只有 exe
+  lib\  pkgconfig / libfdt.a                                  ← 没有任何 DLL
+```
+
+**QEMU 的运行时依赖（glib 等 DLL）缺失，安装不完整。** 这不是固件问题，也不是 console 接线问题（那一步是对的）。
+
+修法（任选）：
+1. `python %IDF_PATH%\tools\idf_tools.py install qemu-riscv32` 重装该工具（需网络）
+2. 手动补齐 QEMU 发行包里的 DLL 到 `qemu\bin`
+3. 放弃 QEMU，改用第 6 节的 `render-preview.ps1`（只验 UI，不验 input/eink）
+
+> 因此「QEMU 在，就能跑」这个前提**不成立**；本次阶段二的 input/eink/rtc/power 逻辑只能靠构建 + 代码审查 + 硬件实测。

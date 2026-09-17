@@ -23,7 +23,7 @@
 | 结构 / 原理图 / 引脚分配 | 已完成（三代定稿）                                         |
 | PCB 布线          | **未开始**                                           |
 | 方案文档            | **已完成**（本次交接的主体）                                  |
-| 代码              | 已建 `components/` 骨架 + `app` 状态机（含设备端配置页）；`font`/`ui`/framebuffer/`link`/`store`(NVS+LittleFS) 已实现，`eink`/`rtc`/`power`/`input` 为桩，可编译出 bin |
+| 代码              | 已建 `components/` 骨架 + `app` 状态机（配置页 / 内容池 / 插画 / 信息条）；`font`/`ui`/`link`/`store`(NVS+LittleFS)/`eink`(整屏)/`rtc`/`power`/`input` 已实现，仅局部刷新与深睡编排未做，可编译出 bin |
 | 字库              | **已生成**，见 `software/font/`（宋体 16×16，含中文标点，131 KB） |
 | 硬件实物            | 待转接板已到货，但墨水屏尚未点亮；其他模块尚未购买                         |
 

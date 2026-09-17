@@ -34,12 +34,15 @@ void      fb_blit_1bit(const uint8_t *data, int x, int y, int w, int h, bool inv
 // 刷新
 esp_err_t eink_flush_full(void);                      // 整屏刷新，含清残影
 esp_err_t eink_flush_partial(int x, int y, int w, int h);  // 局部刷新（第二阶段）
+esp_err_t eink_sleep(void);                           // 面板深睡 0x10 ← 0x01
 ```
 
 **要点**
 
-- `BUSY`（GPIO8）为高表示忙，每次刷新前要等它变低
+- `BUSY`（GPIO8）为高表示忙，每次刷新前要等它变低（带 10s 超时）
 - `RES#`（GPIO2）复位时序：拉低 ≥10ms → 拉高 → 等 ≥20ms
+- SPI2，模式 0，10 MHz；GPIO18/19 与 USB 复用
+- **面板 RAM 极性相反（面板 1=白），写 `0x24` 前逐字节取反**
 - 局部刷新依赖独立 LUT，**先不做**，接口先留着
 - 反白：把目标区域像素取反即可，不需要额外字库
 
@@ -71,28 +74,32 @@ int font_text_width(const char *utf8);
 ## 三、rtc — DS3231
 
 ```c
-esp_err_t rtc_init(void);
+// 总线由 main 建一次，handle 传入（与 power 共用）
+esp_err_t ds3231_init(i2c_master_bus_handle_t bus);
 
-esp_err_t rtc_get_time(struct tm *out);
-esp_err_t rtc_set_time(const struct tm *t);
+esp_err_t ds3231_get_time(struct tm *out);
+esp_err_t ds3231_set_time(const struct tm *t);
 
-// 闹钟（对应 GPIO7 / EXT0）
-esp_err_t rtc_set_alarm(const struct tm *t);
-esp_err_t rtc_clear_alarm(void);
+// 闹钟（对应 GPIO7 唤醒）
+esp_err_t ds3231_set_alarm(const struct tm *t);
+esp_err_t ds3231_clear_alarm(void);
 ```
 
 **要点**
 
-- I2C 地址 `0x68`
+- I2C 地址 `0x68`；函数名用 `ds3231_` 前缀，避开 ESP-IDF 内部 `rtc_init` 符号冲突
+- 时间寄存器 BCD，24 小时制；星期 DS3231 `1=周日` ↔ `tm_wday 0=周日`
 - 唤醒后先读时间，再做别的
 - 深睡前必须设好下一次闹钟
+- ESP32-C3 无 RTCIO/EXT1，GPIO7 唤醒走 `esp_sleep_enable_gpio_wakeup`（见 input 节）
 
 ---
 
 ## 四、power — 电池电压（MCP3021）
 
 ```c
-esp_err_t power_init(void);
+// 总线由 main 建一次，handle 传入（与 rtc 共用）
+esp_err_t power_init(i2c_master_bus_handle_t bus);
 
 esp_err_t power_read_mv(int *mv_out);      // 电池电压，毫伏
 int       power_percent(int mv);           // 换算电量百分比（0~100）
@@ -101,7 +108,7 @@ int       power_percent(int mv);           // 换算电量百分比（0~100）
 **要点**
 
 - I2C 地址 **`0x4B`**（A3T 版本，见 `software-notes.md`）
-- 10-bit ADC：`v_ain = raw * 3300 / 1023`，电池电压 = `v_ain * 2`
+- 10-bit：`code = (hi << 2) | (lo >> 6)`；`mv = code * 3300 / 1023 * 2`
 - 低电量阈值 3.4V（见 `software-notes.md`）
 
 ---
@@ -123,16 +130,18 @@ typedef enum {
 // 非阻塞取事件，无事件返回 false
 bool input_poll(input_event_t *out);
 
-// 深睡后被 GPIO0 EXT1 唤醒时返回 true
+// 深睡后被 GPIO0 唤醒时返回 true
 bool input_woke_from_switch(void);
+
+// 深睡前调用：GPIO0 切数字输入 + 上拉，并使能低电平唤醒
+void input_arm_wakeup(void);
 ```
 
 **要点**
 
-- **一个 GPIO 读出五个动作**：各方向串不同阻值到 COM，GPIO0（ADC1_CH0）读分压值查表判方向
-- 深睡前 GPIO0 配成数字输入 + EXT1 唤醒（任意方向按下即拉低）；唤醒后切成 ADC 读方向，处理完切回
-- 消抖在软件做（连续采样一致才确认）
-- 中央短按 / 长按以 500ms 为界
+- **一个 GPIO 读出五个动作**：各方向串不同阻值到 COM，GPIO0（ADC1_CH0）读分压值查表（阈值是 `#define`，待实测标定）
+- 采样 20ms、8 点平均、连续 3 次一致去抖；上/下/左/右按下沿触发一次；中央松开 <800ms 为短按，按住 ≥800ms 立即长按
+- ESP32-C3 无 RTCIO/EXT1，唤醒用 `gpio_wakeup_enable(GPIO0, LOW_LEVEL)` + `esp_sleep_enable_gpio_wakeup()`
 - 状态映射见 `ui-states.md` 第二节、第五节；硬件见 `encoder-arch.md`
 
 ---
