@@ -18,7 +18,7 @@
 
 ---
 
-## 一、eink — 墨水屏（SSD1680）
+## 一、eink — 墨水屏（SSD1619AZ）
 
 ```c
 esp_err_t eink_init(void);

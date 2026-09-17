@@ -166,7 +166,7 @@ software/
 
 ## 八、待定
 
-1. **局部刷新的 LUT 管理**：SSD1680 局部刷新需要单独波形，先跑通整屏再攻这块
+1. **局部刷新的 LUT 管理**：SSD1619AZ 局部刷新需要单独波形，先跑通整屏再攻这块
 2. ~~LITTLEFS vs SPIFFS~~ **已定：LittleFS。** 以托管组件 `joltwallet/littlefs`（^1.22.0）接入，分区表见 `software/partitions.csv`；比 SPIFFS 更耐掉电
 3. **五向开关 ADC 校准**：C3 的 ADC 有非线性，优先用校准接口或软件标定阈值
 4. **app 分区大小**：默认 1.5MB 够，实测后可能回调

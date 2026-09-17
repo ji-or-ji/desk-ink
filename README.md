@@ -89,7 +89,7 @@
 
 **阶段二：等硬件到位**
 
-6. `eink` 模块：SSD1680 SPI 驱动、整屏刷新
+6. `eink` 模块：SSD1619AZ SPI 驱动、整屏刷新
 7. `rtc` / `power` / `input` 模块
 8. `app` 状态机（`ui-states.md`）
 9. 联调，再攻局部刷新
