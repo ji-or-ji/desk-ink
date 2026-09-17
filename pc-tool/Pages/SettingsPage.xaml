@@ -45,11 +45,6 @@
                         Minimum="10"
                         SpinButtonPlacementMode="Compact" />
                     <ToggleSwitch x:Name="PushTodoSwitch" Header="随课表推送待办" />
-                    <TextBox
-                        x:Name="QuoteBox"
-                        AcceptsReturn="True"
-                        Header="每日一言（留空则不推送）"
-                        TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
 

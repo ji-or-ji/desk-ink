@@ -58,21 +58,25 @@ public sealed class ClassIslandIpcService : IDisposable
             try
             {
                 client = new IpcClient();
-                await client.Connect().WaitAsync(ConnectTimeout, token).ConfigureAwait(false);
 
-                var lessons = client.Provider.CreateIpcProxy<IPublicLessonsService>(client.PeerProxy!);
-
+                // 必须在 Connect() 之前注册：Provider 启动后再 AddNotifyHandler 会抛
+                // InvalidOperationException「禁止在启动之后再次添加处理程序」。
                 client.JsonIpcProvider.AddNotifyHandler(IpcRoutedNotifyIds.OnClassNotifyId, () => RaiseLessonEvent("上课"));
                 client.JsonIpcProvider.AddNotifyHandler(IpcRoutedNotifyIds.OnBreakingTimeNotifyId, () => RaiseLessonEvent("课间"));
                 client.JsonIpcProvider.AddNotifyHandler(IpcRoutedNotifyIds.OnAfterSchoolNotifyId, () => RaiseLessonEvent("放学"));
                 client.JsonIpcProvider.AddNotifyHandler(IpcRoutedNotifyIds.CurrentTimeStateChangedNotifyId, () => RaiseLessonEvent("时间点变化"));
 
-                _client = client;
-                _lessons = lessons;
-                SetConnected(true);
-                _log.Info("已连接 ClassIsland");
+                await client.Connect().WaitAsync(ConnectTimeout, token).ConfigureAwait(false);
 
-                await PollAsync(token).ConfigureAwait(false);
+                // Connect() 的续体可能仍运行在 IPC 的接收线程上。若在该线程上同步调用代理方法，
+                // 接收线程会阻塞自己，请求永远等不到响应 —— 所以轮询必须放到独立线程。
+                var pollTask = Task.Factory.StartNew(
+                    () => RunPollLoop(client, token),
+                    token,
+                    TaskCreationOptions.LongRunning,
+                    TaskScheduler.Default);
+
+                await pollTask.ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {
@@ -80,7 +84,8 @@ public sealed class ClassIslandIpcService : IDisposable
             }
             catch (Exception ex)
             {
-                _log.Warn($"ClassIsland 连接不可用：{ex.Message}");
+                var inner = ex.InnerException is null ? string.Empty : $" / {ex.InnerException.GetType().Name}: {ex.InnerException.Message}";
+                _log.Warn($"ClassIsland 连接不可用：{ex.GetType().Name}: {ex.Message}{inner}");
             }
             finally
             {
@@ -114,14 +119,29 @@ public sealed class ClassIslandIpcService : IDisposable
         }
     }
 
-    private async Task PollAsync(CancellationToken token)
+    /// <summary>在独立线程上跑轮询（绝不能是 IPC 接收线程，否则同步代理调用会死锁）。</summary>
+    private void RunPollLoop(IpcClient client, CancellationToken token)
     {
+        var lessons = client.Provider.CreateIpcProxy<IPublicLessonsService>(client.PeerProxy!);
+        _client = client;
+        _lessons = lessons;
+
+        // 先读一帧，保证「已连接」事件里就能拿到课表数据（否则首次推送会因无数据被跳过）。
+        LastSnapshot = ReadSnapshot();
+
+        _log.Info("已连接 ClassIsland");
+        SetConnected(true);
+
         while (!token.IsCancellationRequested)
         {
             var snapshot = ReadSnapshot();
             LastSnapshot = snapshot;
             LessonUpdated?.Invoke(snapshot);
-            await Task.Delay(PollInterval, token).ConfigureAwait(false);
+
+            if (token.WaitHandle.WaitOne(PollInterval))
+            {
+                break;
+            }
         }
     }
 

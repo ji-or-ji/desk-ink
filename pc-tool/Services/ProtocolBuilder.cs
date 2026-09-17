@@ -44,4 +44,13 @@ public static class ProtocolBuilder
 
     public static string BuildTodo(IEnumerable<TodoItem> items)
         => JsonSerializer.Serialize(new TodoMessage { Items = items.Take(8).ToList() }, Options);
+
+    public static string BuildImgBegin(int id, string name, int bytes, int total)
+        => JsonSerializer.Serialize(new ImgBeginMessage { Id = id, Name = name, Bytes = bytes, Total = total }, Options);
+
+    public static string BuildImgChunk(int id, int seq, string base64)
+        => JsonSerializer.Serialize(new ImgChunkMessage { Id = id, Seq = seq, Data = base64 }, Options);
+
+    public static string BuildImgEnd(int id, int crc)
+        => JsonSerializer.Serialize(new ImgEndMessage { Id = id, Crc = crc }, Options);
 }

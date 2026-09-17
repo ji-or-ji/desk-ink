@@ -11,6 +11,7 @@ public sealed class PushCoordinator : IDisposable
     private readonly ClassIslandIpcService _ipc;
     private readonly SerialLinkService _serial;
     private readonly SettingsService _settings;
+    private readonly QuoteService _quote;
     private readonly LogService _log;
 
     private readonly CancellationTokenSource _cts = new();
@@ -22,11 +23,13 @@ public sealed class PushCoordinator : IDisposable
         ClassIslandIpcService ipc,
         SerialLinkService serial,
         SettingsService settings,
+        QuoteService quote,
         LogService log)
     {
         _ipc = ipc;
         _serial = serial;
         _settings = settings;
+        _quote = quote;
         _log = log;
     }
 
@@ -42,6 +45,7 @@ public sealed class PushCoordinator : IDisposable
         _ipc.LessonEvent += OnLessonEvent;
         _ipc.ConnectionChanged += OnConnectionChanged;
         _serial.LineReceived += OnLineReceived;
+        _quote.Changed += OnQuoteChanged;
         _periodic = Task.Run(() => PeriodicLoopAsync(_cts.Token));
     }
 
@@ -62,6 +66,14 @@ public sealed class PushCoordinator : IDisposable
         if (connected)
         {
             PushAll("ClassIsland 已连接");
+        }
+    }
+
+    private void OnQuoteChanged()
+    {
+        if (_serial.IsOpen)
+        {
+            PushQuote("每日一言更新");
         }
     }
 
@@ -126,7 +138,12 @@ public sealed class PushCoordinator : IDisposable
 
     public bool PushQuote(string reason)
     {
-        var quote = _settings.Current.Quote;
+        if (!_settings.Current.PushQuote)
+        {
+            return false;
+        }
+
+        var quote = _quote.Current;
         if (string.IsNullOrWhiteSpace(quote))
         {
             return false;

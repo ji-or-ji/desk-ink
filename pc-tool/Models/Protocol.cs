@@ -58,6 +58,22 @@ public sealed record LessonSnapshot(
     public string LeftText => State is TimeState.OnClass or TimeState.Breaking ? $"{LeftMinutes} 分钟" : "—";
 }
 
+/// <summary>每日一言的来源。</summary>
+public enum QuoteSourceKind
+{
+    /// <summary>公益源：一言 hitokoto。</summary>
+    Hitokoto,
+
+    /// <summary>手动填写。</summary>
+    Manual,
+
+    /// <summary>自定义网址。</summary>
+    Url,
+
+    /// <summary>本地文件（每行一条）。</summary>
+    File
+}
+
 public sealed class TodoItem
 {
     [JsonPropertyName("id")] public int Id { get; set; }
@@ -99,4 +115,28 @@ public sealed class TodoMessage
 {
     [JsonPropertyName("t")] public string T { get; set; } = "todo";
     [JsonPropertyName("items")] public List<TodoItem> Items { get; set; } = new();
+}
+
+public sealed class ImgBeginMessage
+{
+    [JsonPropertyName("t")] public string T { get; set; } = "img_begin";
+    [JsonPropertyName("id")] public int Id { get; set; }
+    [JsonPropertyName("name")] public string Name { get; set; } = string.Empty;
+    [JsonPropertyName("bytes")] public int Bytes { get; set; }
+    [JsonPropertyName("total")] public int Total { get; set; }
+}
+
+public sealed class ImgChunkMessage
+{
+    [JsonPropertyName("t")] public string T { get; set; } = "img_chunk";
+    [JsonPropertyName("id")] public int Id { get; set; }
+    [JsonPropertyName("seq")] public int Seq { get; set; }
+    [JsonPropertyName("data")] public string Data { get; set; } = string.Empty;
+}
+
+public sealed class ImgEndMessage
+{
+    [JsonPropertyName("t")] public string T { get; set; } = "img_end";
+    [JsonPropertyName("id")] public int Id { get; set; }
+    [JsonPropertyName("crc")] public int Crc { get; set; }
 }

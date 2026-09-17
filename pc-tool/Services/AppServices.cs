@@ -9,7 +9,9 @@ public sealed class AppServices : IDisposable
         Log = new LogService();
         Ipc = new ClassIslandIpcService(Log);
         Serial = new SerialLinkService(Log);
-        Push = new PushCoordinator(Ipc, Serial, Settings, Log);
+        Quote = new QuoteService(Settings, Log);
+        Artwork = new ArtworkService(Serial, Log);
+        Push = new PushCoordinator(Ipc, Serial, Settings, Quote, Log);
     }
 
     public SettingsService Settings { get; }
@@ -20,6 +22,10 @@ public sealed class AppServices : IDisposable
 
     public SerialLinkService Serial { get; }
 
+    public QuoteService Quote { get; }
+
+    public ArtworkService Artwork { get; }
+
     public PushCoordinator Push { get; }
 
     public void Start()
@@ -28,6 +34,7 @@ public sealed class AppServices : IDisposable
         ApplySerialSettings();
 
         Ipc.Start();
+        Quote.Start();
         Push.Start();
     }
 
@@ -80,6 +87,7 @@ public sealed class AppServices : IDisposable
     {
         Push.Dispose();
         Ipc.Dispose();
+        Quote.Dispose();
         Serial.Dispose();
     }
 }

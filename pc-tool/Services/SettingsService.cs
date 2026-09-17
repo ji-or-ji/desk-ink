@@ -20,7 +20,21 @@ public sealed class AppSettings
 
     public bool AutoStart { get; set; }
 
+    public bool PushQuote { get; set; } = true;
+
+    public QuoteSourceKind QuoteSource { get; set; } = QuoteSourceKind.Hitokoto;
+
+    /// <summary>手动填写的内容（QuoteSource = Manual 时使用）。</summary>
     public string Quote { get; set; } = string.Empty;
+
+    /// <summary>自定义网址（QuoteSource = Url 时使用）。</summary>
+    public string QuoteUrl { get; set; } = "https://v1.hitokoto.cn/";
+
+    /// <summary>本地文件路径（QuoteSource = File 时使用）。</summary>
+    public string QuoteFile { get; set; } = string.Empty;
+
+    /// <summary>上次选择的插画目标尺寸，下次默认沿用。</summary>
+    public ArtworkModeKind ArtworkMode { get; set; } = ArtworkModeKind.FullScreen;
 
     public List<TodoItem> Todos { get; set; } = new();
 }

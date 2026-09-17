@@ -29,6 +29,16 @@
                         <SymbolIcon Symbol="Setting" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem Content="插画" Tag="artwork">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8B9;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="一言" Tag="quote">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8BD;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <Frame x:Name="ContentFrame" />
@@ -51,10 +61,12 @@
             </tb:TaskbarIcon.IconSource>
             <tb:TaskbarIcon.ContextFlyout>
                 <MenuFlyout>
-                    <MenuFlyoutItem Click="TrayOpenManage_Click" Text="打开管理页" />
-                    <MenuFlyoutItem Click="TrayOpenSettings_Click" Text="打开设置" />
+                    <MenuFlyoutItem x:Name="TrayManageItem" Text="打开管理页" />
+                    <MenuFlyoutItem x:Name="TraySettingsItem" Text="打开设置" />
+                    <MenuFlyoutItem x:Name="TrayArtworkItem" Text="打开插画" />
+                    <MenuFlyoutItem x:Name="TrayQuoteItem" Text="打开一言" />
                     <MenuFlyoutSeparator />
-                    <MenuFlyoutItem Click="TrayExit_Click" Text="退出" />
+                    <MenuFlyoutItem x:Name="TrayExitItem" Text="退出" />
                 </MenuFlyout>
             </tb:TaskbarIcon.ContextFlyout>
         </tb:TaskbarIcon>

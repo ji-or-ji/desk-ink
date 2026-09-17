@@ -6,6 +6,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Windows.Graphics;
 using WinRT.Interop;
 
 namespace DeskInk.PcTool;
@@ -14,6 +15,7 @@ public sealed partial class MainWindow : Window
 {
     private const int SwHide = 0;
     private const int SwShow = 5;
+    private const int SwRestore = 9;
 
     private readonly AppServices _services;
     private readonly IntPtr _hwnd;
@@ -26,11 +28,21 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
 
         _hwnd = WindowNative.GetWindowHandle(this);
+        ResizeToWorkArea();
 
         ContentFrame.Navigate(typeof(ManagePage));
 
         AppWindow.Closing += OnClosing;
         Activated += OnActivated;
+
+        // 左键单击托盘图标就把窗口唤回来（右键仍出菜单）。
+        // 注意：H.NotifyIcon 默认的 PopupMenu 模式只认 MenuFlyoutItem.Command，不触发 Click 事件。
+        TrayIcon.LeftClickCommand = new DelegateCommand(() => ShowPage(0, "左键"));
+        TrayManageItem.Command = new DelegateCommand(() => ShowPage(0, "菜单：管理页"));
+        TraySettingsItem.Command = new DelegateCommand(() => ShowPage(1, "菜单：设置"));
+        TrayArtworkItem.Command = new DelegateCommand(() => ShowPage(2, "菜单：插画"));
+        TrayQuoteItem.Command = new DelegateCommand(() => ShowPage(3, "菜单：一言"));
+        TrayExitItem.Command = new DelegateCommand(ExitApplication);
 
         _services.Ipc.ConnectionChanged += _ => UpdateTray();
         _services.Serial.StateChanged += _ => UpdateTray();
@@ -69,6 +81,19 @@ public sealed partial class MainWindow : Window
         ShowWindow(_hwnd, SwHide);
     }
 
+    private void ResizeToWorkArea()
+    {
+        try
+        {
+            var workArea = DisplayArea.GetFromWindowId(AppWindow.Id, DisplayAreaFallback.Primary).WorkArea;
+            AppWindow.Resize(new SizeInt32(Math.Min(1200, workArea.Width), Math.Min(800, workArea.Height)));
+        }
+        catch
+        {
+            // 调整窗口大小失败不影响功能。
+        }
+    }
+
     private void Nav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
         if (args.SelectedItem is not NavigationViewItem item)
@@ -76,18 +101,21 @@ public sealed partial class MainWindow : Window
             return;
         }
 
-        var page = item.Tag as string == "settings" ? typeof(SettingsPage) : typeof(ManagePage);
+        var page = (item.Tag as string) switch
+        {
+            "settings" => typeof(SettingsPage),
+            "artwork" => typeof(ArtworkPage),
+            "quote" => typeof(QuotePage),
+            _ => typeof(ManagePage)
+        };
+
         if (ContentFrame.CurrentSourcePageType != page)
         {
             ContentFrame.Navigate(page);
         }
     }
 
-    private void TrayOpenManage_Click(object sender, RoutedEventArgs e) => ShowPage(0);
-
-    private void TrayOpenSettings_Click(object sender, RoutedEventArgs e) => ShowPage(1);
-
-    private void TrayExit_Click(object sender, RoutedEventArgs e)
+    private void ExitApplication()
     {
         _reallyExit = true;
         try
@@ -104,10 +132,22 @@ public sealed partial class MainWindow : Window
         Application.Current.Exit();
     }
 
-    private void ShowPage(int index)
+    private void ShowPage(int index, string reason)
     {
-        ShowWindow(_hwnd, SwShow);
-        Activate();
+        _services.Log.Info($"托盘唤起：{reason}");
+
+        try
+        {
+            ShowWindow(_hwnd, SwShow);
+            ShowWindow(_hwnd, SwRestore);
+            SetForegroundWindow(_hwnd);
+            Activate();
+        }
+        catch (Exception ex)
+        {
+            _services.Log.Warn($"唤回窗口失败：{ex.Message}");
+        }
+
         if (index >= 0 && index < Nav.MenuItems.Count)
         {
             Nav.SelectedItem = Nav.MenuItems[index];
@@ -145,4 +185,7 @@ public sealed partial class MainWindow : Window
 
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hWnd);
 }

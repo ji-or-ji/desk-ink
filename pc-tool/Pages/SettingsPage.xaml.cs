@@ -23,7 +23,6 @@ public sealed partial class SettingsPage : Page
         PeriodicSwitch.IsOn = settings.PeriodicPushEnabled;
         PeriodicSecondsBox.Value = settings.PeriodicPushSeconds;
         PushTodoSwitch.IsOn = settings.PushTodo;
-        QuoteBox.Text = settings.Quote;
         AutoStartSwitch.IsOn = AutoStartService.IsEnabled();
     }
 
@@ -73,7 +72,6 @@ public sealed partial class SettingsPage : Page
             ? 60
             : (int)Math.Clamp(PeriodicSecondsBox.Value, 10, 3600);
         settings.PushTodo = PushTodoSwitch.IsOn;
-        settings.Quote = QuoteBox.Text;
         settings.AutoStart = AutoStartSwitch.IsOn;
         if (PortCombo.SelectedItem is string port)
         {
