@@ -30,6 +30,12 @@ static size_t  s_img_len;
 static size_t  s_img_expected;
 static int     s_img_seq_next;
 
+/* ---------- 待办分片组包 ---------- */
+static todo_list_t s_todo_acc;
+static int         s_todo_seq_next;
+static int         s_todo_total;
+static bool        s_todo_active;
+
 /* ---------- 工具 ---------- */
 
 static int b64_val(char c)
@@ -161,16 +167,53 @@ static void parse_schedule(const char *line, schedule_t *s)
     }
 }
 
-static void parse_todo(const char *line, todo_list_t *t)
+/* 待办分片：seq==0 开始新任务，逐片累加，收齐 total 片后整体回调 */
+static void handle_todo(const char *line)
 {
+    int seq = 0;
+    int total = 1;
+    if (!json_value_int(json_obj_get(line, "seq"), &seq)) {
+        seq = 0;
+    }
+    if (!json_value_int(json_obj_get(line, "total"), &total) || total <= 0) {
+        total = 1;
+    }
+
+    if (seq == 0) {
+        s_todo_acc.count = 0;
+        s_todo_seq_next = 0;
+        s_todo_total = total;
+        s_todo_active = true;
+    }
+    if (!s_todo_active || seq != s_todo_seq_next) {
+        ESP_LOGW(TAG, "todo seq jump (got %d want %d), drop task", seq, s_todo_seq_next);
+        s_todo_active = false;
+        return;
+    }
+
     const char *it = json_array_first(json_obj_get(line, "items"));
-    while (it && t->count < LINK_TODO_MAX) {
-        todo_item_t *item = &t->items[t->count];
+    while (it && s_todo_acc.count < LINK_TODO_MAX) {
+        todo_item_t *item = &s_todo_acc.items[s_todo_acc.count];
         json_value_int(json_obj_get(it, "id"), &item->id);
         json_value_bool(json_obj_get(it, "done"), &item->done);
         json_value_str(json_obj_get(it, "text"), item->text, sizeof(item->text));
-        t->count++;
+        s_todo_acc.count++;
         it = json_array_next(it);
+    }
+    s_todo_seq_next++;
+
+    if (s_todo_seq_next >= s_todo_total) {
+        s_todo_active = false;
+        ESP_LOGI(TAG, "todo assembled: %d item(s) from %d frame(s)", s_todo_acc.count, s_todo_total);
+        if (s_rx_cb) {
+            memset(&s_msg, 0, sizeof(s_msg));
+            s_msg.type = MSG_TODO;
+            s_msg.u.todo = s_todo_acc;
+            size_t len = strlen(line);
+            size_t cp = len < sizeof(s_msg.raw) - 1 ? len : sizeof(s_msg.raw) - 1;
+            memcpy(s_msg.raw, line, cp);
+            s_rx_cb(&s_msg);
+        }
     }
 }
 
@@ -250,6 +293,10 @@ static void dispatch_line(const char *line, size_t len)
         handle_img(type, line);
         return;
     }
+    if (strcmp(type, "todo") == 0) {
+        handle_todo(line);   /* 分片累加，收齐才回调 */
+        return;
+    }
 
     memset(&s_msg, 0, sizeof(s_msg));
     size_t cp = len < sizeof(s_msg.raw) - 1 ? len : sizeof(s_msg.raw) - 1;
@@ -258,9 +305,6 @@ static void dispatch_line(const char *line, size_t len)
     if (strcmp(type, "schedule") == 0) {
         s_msg.type = MSG_SCHEDULE;
         parse_schedule(line, &s_msg.u.schedule);
-    } else if (strcmp(type, "todo") == 0) {
-        s_msg.type = MSG_TODO;
-        parse_todo(line, &s_msg.u.todo);
     } else if (strcmp(type, "quote") == 0) {
         s_msg.type = MSG_QUOTE;
         json_value_str(json_obj_get(line, "text"), s_msg.u.quote.text, sizeof(s_msg.u.quote.text));
@@ -428,23 +472,51 @@ esp_err_t link_send_todo(const todo_list_t *list)
     if (list == NULL) {
         return ESP_ERR_INVALID_ARG;
     }
-    char buf[LINK_LINE_MAX];
-    int n = snprintf(buf, sizeof(buf), "{\"t\":\"todo\",\"items\":[");
-
-    for (int i = 0; i < list->count && i < LINK_TODO_MAX; i++) {
-        char txt[128];
-        char item[200];
-        json_escape(list->items[i].text, txt, sizeof(txt));
-        int il = snprintf(item, sizeof(item), "%s{\"id\":%d,\"done\":%s,\"text\":\"%s\"}",
-                          i ? "," : "", list->items[i].id,
-                          list->items[i].done ? "true" : "false", txt);
-        if (il < 0 || il >= (int)sizeof(item) || n + il + 4 > (int)sizeof(buf)) {
-            ESP_LOGW(TAG, "todo frame full, truncated at item %d", i);
-            break;
-        }
-        memcpy(buf + n, item, (size_t)il);
-        n += il;
+    const int per = 2;   /* 每片最多 2 条（2×72 + 外壳 ≈ 186 < 255） */
+    int count = list->count;
+    if (count < 0) {
+        count = 0;
     }
-    n += snprintf(buf + n, sizeof(buf) - (size_t)n, "]}");
-    return uart_write_line(buf);
+    if (count > LINK_TODO_MAX) {
+        count = LINK_TODO_MAX;
+    }
+    int total = (count + per - 1) / per;
+    if (total == 0) {
+        total = 1;   /* 空列表也发一片，表示“全量为空” */
+    }
+
+    for (int seq = 0; seq < total; seq++) {
+        char buf[LINK_LINE_MAX];
+        int n = snprintf(buf, sizeof(buf), "{\"t\":\"todo\",\"seq\":%d,\"total\":%d,\"items\":[",
+                         seq, total);
+        int start = seq * per;
+        int end = start + per;
+        if (end > count) {
+            end = count;
+        }
+        for (int i = start; i < end; i++) {
+            char txt[128];
+            char item[200];
+            json_escape(list->items[i].text, txt, sizeof(txt));
+            int il = snprintf(item, sizeof(item), "%s{\"id\":%d,\"done\":%s,\"text\":\"%s\"}",
+                              (i > start) ? "," : "", list->items[i].id,
+                              list->items[i].done ? "true" : "false", txt);
+            if (il < 0 || il >= (int)sizeof(item) || n + il + 4 > (int)sizeof(buf)) {
+                ESP_LOGW(TAG, "todo item too long, skipped");
+                break;
+            }
+            memcpy(buf + n, item, (size_t)il);
+            n += il;
+        }
+        n += snprintf(buf + n, sizeof(buf) - (size_t)n, "]}");
+
+        esp_err_t err = uart_write_line(buf);
+        if (err != ESP_OK) {
+            return err;
+        }
+        if (seq + 1 < total) {
+            vTaskDelay(pdMS_TO_TICKS(1));   /* 片间小间隔，别灌爆蓝牙缓冲 */
+        }
+    }
+    return ESP_OK;
 }

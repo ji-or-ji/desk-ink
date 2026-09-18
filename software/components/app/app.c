@@ -448,7 +448,7 @@ static void handle_input(input_event_t ev)
             render_state();
             present();
         } else if (ev == INPUT_DOWN) {
-            if (s_todo_cursor < UI_TODO_MAX - 1) {
+            if (s_todo_cursor < s_todos.count - 1) {
                 s_todo_cursor++;
             }
             render_state();
