@@ -104,23 +104,46 @@ ASCII 打到日志，那就是**真代码渲染出来的画面**。
 
 ---
 
-## 七、本机实测：QEMU 跑不起来（2026-09-17）
+## 七、本机实测：QEMU 能跑，但 console 覆盖一开始没生效（2026-09-18 更正）
 
-按第四节配方构建 `build-qemu` **成功**（bin 0x70820），但 `idf.py qemu` 无任何输出即退出。
+### 先前结论有误
 
-直接执行 QEMU 得到退出码 **`-1073741515` = `0xC0000135` (STATUS_DLL_NOT_FOUND)**。
+2026-09-17 曾记录「QEMU 跑不起来、缺 DLL」，**该结论不成立**。
+
+复现结果：`qemu-system-riscv32.exe` 的 `--version` 和完整仿真**都正常**；
+`bin\` 里没有 DLL 是**正常的**（可执行文件静态链接，不依赖外部运行库）。
+
+> 判据很硬：若真缺运行库，`--version` 也会失败。它不失败。
+
+### 真正的原因
+
+`build-qemu` 里 `CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG` 仍为 1 —— 第四节给的
+`-D SDKCONFIG_DEFAULTS=...` **没有生效**。
+
+原因：`SDKCONFIG_DEFAULTS` 只在**生成新 sdkconfig** 时起作用。项目根的
+`sdkconfig` 早已存在，其中显式设置压过了 defaults。
+
+### 正确做法
+
+改**根 `sdkconfig`**（它是生成物、已被 gitignore），而不是塞 defaults：
 
 ```
-C:\Espressif\tools\qemu-riscv32\esp_develop_9.2.2_20250817\qemu\
-  bin\  qemu-system-riscv32.exe / qemu-system-riscv32w.exe   ← 只有 exe
-  lib\  pkgconfig / libfdt.a                                  ← 没有任何 DLL
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=n
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
 ```
 
-**QEMU 的运行时依赖（glib 等 DLL）缺失，安装不完整。** 这不是固件问题，也不是 console 接线问题（那一步是对的）。
+改完重建，`build-qemu/config/sdkconfig.h` 里应出现 `CONFIG_ESP_CONSOLE_UART_DEFAULT`。
+**不做实验时记得改回 USB Serial/JTAG。**
 
-修法（任选）：
-1. `python %IDF_PATH%\tools\idf_tools.py install qemu-riscv32` 重装该工具（需网络）
-2. 手动补齐 QEMU 发行包里的 DLL 到 `qemu\bin`
-3. 放弃 QEMU，改用第 6 节的 `render-preview.ps1`（只验 UI，不验 input/eink）
+### 验证结果（已复现）
 
-> 因此「QEMU 在，就能跑」这个前提**不成立**；本次阶段二的 input/eink/rtc/power 逻辑只能靠构建 + 代码审查 + 硬件实测。
+固件在 QEMU 里正常启动：
+
+```
+boot: ESP-IDF v6.0.1 2nd stage bootloader
+boot: Loaded app from partition at offset 0x10000
+app_init: Project name:     desk-ink
+spi_flash: detected chip: gd
+```
+
+目前在 `spi_flash` 之后停住，`app_main` 的日志尚未出现 —— **下一步查这里**。
