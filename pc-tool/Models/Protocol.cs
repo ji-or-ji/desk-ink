@@ -58,6 +58,22 @@ public sealed record LessonSnapshot(
     public string LeftText => State is TimeState.OnClass or TimeState.Breaking ? $"{LeftMinutes} 分钟" : "—";
 }
 
+/// <summary>新闻来源。</summary>
+public enum NewsSourceKind
+{
+    /// <summary>RSS / Atom feed，取最新一条标题。</summary>
+    Rss,
+
+    /// <summary>自定义网址（JSON 或纯文本）。</summary>
+    Url,
+
+    /// <summary>本地文件（每行一条）。</summary>
+    File,
+
+    /// <summary>手动填写。</summary>
+    Manual
+}
+
 /// <summary>每日一言的来源。</summary>
 public enum QuoteSourceKind
 {
@@ -114,7 +130,20 @@ public sealed class QuoteMessage
 public sealed class TodoMessage
 {
     [JsonPropertyName("t")] public string T { get; set; } = "todo";
+    [JsonPropertyName("seq")] public int Seq { get; set; }
+    [JsonPropertyName("total")] public int Total { get; set; }
     [JsonPropertyName("items")] public List<TodoItem> Items { get; set; } = new();
+}
+
+public sealed class NewsMessage
+{
+    [JsonPropertyName("t")] public string T { get; set; } = "news";
+
+    /// <summary>设备端只显示一行、最多 7 个汉字，长标题会被切；正文请放 body。</summary>
+    [JsonPropertyName("title")] public string Title { get; set; } = string.Empty;
+
+    /// <summary>正文，最多 49 个汉字。</summary>
+    [JsonPropertyName("body")] public string Body { get; set; } = string.Empty;
 }
 
 /// <summary>设备 → PC 的配置上报（只读镜像）。</summary>

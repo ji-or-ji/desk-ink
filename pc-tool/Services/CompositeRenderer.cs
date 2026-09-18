@@ -1,3 +1,5 @@
+using DeskInk.PcTool.Models;
+
 namespace DeskInk.PcTool.Services;
 
 /// <summary>信息条模式，对应设备端 <c>bar_mode</c>。</summary>
@@ -49,6 +51,61 @@ public static class CompositeRenderer
         var canvas = new MonoCanvas(FullWidth, FullHeight);
         canvas.Blit(image134x200, PanelWidth, PanelHeight, PanelX, PanelY);
         return canvas.Buffer;
+    }
+
+    // 待办区（ui.c：TODO_X=0, TODO_Y=64, 266×236；行距 30，勾选框 13×13，正文 x=30）
+    public const int TodoY = 64;
+    public const int TodoHeight = 236;
+    public const int TodoDividerX = 266;
+    private const int TodoPad = 8;
+    private const int TodoFirstRowY = 99;
+    private const int TodoRowSpacing = 30;
+
+    /// <summary>400×300 画布上画设备待办区（含竖分隔线），用真字库。</summary>
+    public static byte[] ComposeTodo(IReadOnlyList<TodoItem> items, DeviceFont? font)
+    {
+        var canvas = new MonoCanvas(FullWidth, FullHeight);
+        canvas.DrawVLine(TodoDividerX, TodoY, TodoY + TodoHeight - 1, true);
+
+        if (font is null)
+        {
+            return canvas.Buffer;
+        }
+
+        // 白底黑字：DrawText 的最后一个参数是「是否清像素」，传 true 才是涂黑。
+        font.DrawText(canvas, TodoPad, TodoY + 8, "待办", true);
+
+        if (items.Count == 0)
+        {
+            font.DrawText(canvas, TodoPad, TodoY + 35, "（暂无待办）", true);
+            return canvas.Buffer;
+        }
+
+        for (var i = 0; i < items.Count && i < 8; i++)
+        {
+            var y = TodoFirstRowY + i * TodoRowSpacing;
+            DrawCheckbox(canvas, TodoPad, y, items[i].Done);
+            font.DrawText(canvas, 30, y - 3, items[i].Text, true);
+        }
+
+        return canvas.Buffer;
+    }
+
+    private static void DrawCheckbox(MonoCanvas canvas, int x, int y, bool done)
+    {
+        canvas.DrawRect(x, y, 13, 13, true);
+        if (!done)
+        {
+            return;
+        }
+
+        canvas.SetPixel(x + 3, y + 6, true);
+        canvas.SetPixel(x + 4, y + 7, true);
+        canvas.SetPixel(x + 5, y + 8, true);
+        canvas.SetPixel(x + 6, y + 7, true);
+        canvas.SetPixel(x + 7, y + 6, true);
+        canvas.SetPixel(x + 8, y + 5, true);
+        canvas.SetPixel(x + 9, y + 4, true);
     }
 
     private static void DrawBar(

@@ -42,6 +42,7 @@ public sealed partial class MainWindow : Window
         TraySettingsItem.Command = new DelegateCommand(() => ShowPage("settings", "菜单：设置"));
         TrayArtworkItem.Command = new DelegateCommand(() => ShowPage("artwork", "菜单：插画"));
         TrayQuoteItem.Command = new DelegateCommand(() => ShowPage("quote", "菜单：一言"));
+        TrayTodoItem.Command = new DelegateCommand(() => ShowPage("todo", "菜单：待办"));
         TrayExitItem.Command = new DelegateCommand(ExitApplication);
 
         _services.Ipc.ConnectionChanged += _ => UpdateTray();
@@ -106,6 +107,7 @@ public sealed partial class MainWindow : Window
             "settings" => typeof(SettingsPage),
             "artwork" => typeof(ArtworkPage),
             "quote" => typeof(QuotePage),
+            "todo" => typeof(TodoPage),
             _ => typeof(ManagePage)
         };
 

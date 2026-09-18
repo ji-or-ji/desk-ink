@@ -34,6 +34,11 @@
                         <FontIcon Glyph="&#xE8BD;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
+                <NavigationViewItem Content="待办" Tag="todo">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE9D5;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
@@ -68,6 +73,7 @@
                     <MenuFlyoutItem x:Name="TraySettingsItem" Text="打开设置" />
                     <MenuFlyoutItem x:Name="TrayArtworkItem" Text="打开插画" />
                     <MenuFlyoutItem x:Name="TrayQuoteItem" Text="打开一言" />
+                    <MenuFlyoutItem x:Name="TrayTodoItem" Text="打开待办" />
                     <MenuFlyoutSeparator />
                     <MenuFlyoutItem x:Name="TrayExitItem" Text="退出" />
                 </MenuFlyout>

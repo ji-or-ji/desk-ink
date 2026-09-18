@@ -33,6 +33,22 @@ public sealed class AppSettings
     /// <summary>本地文件路径（QuoteSource = File 时使用）。</summary>
     public string QuoteFile { get; set; } = string.Empty;
 
+    public bool PushNews { get; set; }
+
+    public NewsSourceKind NewsSource { get; set; } = NewsSourceKind.Rss;
+
+    /// <summary>RSS / Atom feed 网址。</summary>
+    public string NewsFeedUrl { get; set; } = string.Empty;
+
+    /// <summary>自定义网址（JSON 或纯文本）。</summary>
+    public string NewsUrl { get; set; } = string.Empty;
+
+    /// <summary>本地文件路径。</summary>
+    public string NewsFile { get; set; } = string.Empty;
+
+    /// <summary>手动填写的内容。</summary>
+    public string NewsManual { get; set; } = string.Empty;
+
     /// <summary>上次选择的插画目标尺寸，下次默认沿用。</summary>
     public ArtworkModeKind ArtworkMode { get; set; } = ArtworkModeKind.FullScreen;
 

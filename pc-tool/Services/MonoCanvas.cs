@@ -62,6 +62,36 @@ public sealed class MonoCanvas
         }
     }
 
+    public void DrawVLine(int x, int y0, int y1, bool black)
+    {
+        for (var y = Math.Min(y0, y1); y <= Math.Max(y0, y1); y++)
+        {
+            SetPixel(x, y, black);
+        }
+    }
+
+    public void DrawHLine(int x0, int x1, int y, bool black)
+    {
+        for (var x = Math.Min(x0, x1); x <= Math.Max(x0, x1); x++)
+        {
+            SetPixel(x, y, black);
+        }
+    }
+
+    /// <summary>空心矩形（对应固件 <c>fb_draw_rect(..., border:true, fill:false)</c>）。</summary>
+    public void DrawRect(int x, int y, int width, int height, bool black)
+    {
+        if (width <= 0 || height <= 0)
+        {
+            return;
+        }
+
+        DrawHLine(x, x + width - 1, y, black);
+        DrawHLine(x, x + width - 1, y + height - 1, black);
+        DrawVLine(x, y, y + height - 1, black);
+        DrawVLine(x + width - 1, y, y + height - 1, black);
+    }
+
     public void InvertRect(int x, int y, int width, int height)
     {
         for (var yy = Math.Max(0, y); yy < Math.Min(Height, y + height); yy++)

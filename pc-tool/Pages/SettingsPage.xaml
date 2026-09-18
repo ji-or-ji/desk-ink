@@ -48,6 +48,55 @@
                 </StackPanel>
             </Border>
 
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="新闻" />
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="12">
+                    <ToggleSwitch x:Name="PushNewsSwitch" Header="随课表推送新闻" />
+                    <ComboBox
+                        x:Name="NewsSourceCombo"
+                        Header="来源"
+                        HorizontalAlignment="Stretch"
+                        SelectionChanged="NewsSourceCombo_SelectionChanged">
+                        <ComboBoxItem Content="RSS / Atom" Tag="Rss" />
+                        <ComboBoxItem Content="自定义网址" Tag="Url" />
+                        <ComboBoxItem Content="本地文件" Tag="File" />
+                        <ComboBoxItem Content="手动填写" Tag="Manual" />
+                    </ComboBox>
+                    <TextBox x:Name="NewsFeedUrlBox" Header="RSS / Atom 网址" />
+                    <TextBox x:Name="NewsUrlBox" Header="自定义网址（JSON 取 title/headline/text/content/body/data，否则取首行）" />
+                    <Grid x:Name="NewsFileRow" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="NewsFileBox" Header="本地文件路径（每行一条，按天轮换）" />
+                        <Button
+                            Grid.Column="1"
+                            VerticalAlignment="Bottom"
+                            Click="BrowseNewsFile_Click"
+                            Content="浏览…" />
+                    </Grid>
+                    <TextBox
+                        x:Name="NewsManualBox"
+                        AcceptsReturn="True"
+                        Header="手动填写"
+                        TextWrapping="Wrap" />
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button Click="RefreshNews_Click" Content="立即刷新" />
+                        <Button Click="PushNews_Click" Content="推送到设备" />
+                        <TextBlock
+                            x:Name="NewsStatusText"
+                            VerticalAlignment="Center"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                    <TextBlock
+                        x:Name="NewsPreviewText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="尚未获取"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="设备配置" />
             <Border Style="{StaticResource CardStyle}">
                 <StackPanel Spacing="12">
