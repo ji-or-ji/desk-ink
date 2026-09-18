@@ -12,6 +12,7 @@ public sealed class PushCoordinator : IDisposable
     private readonly SerialLinkService _serial;
     private readonly SettingsService _settings;
     private readonly QuoteService _quote;
+    private readonly DeviceConfigService _deviceConfig;
     private readonly LogService _log;
 
     private readonly CancellationTokenSource _cts = new();
@@ -24,12 +25,14 @@ public sealed class PushCoordinator : IDisposable
         SerialLinkService serial,
         SettingsService settings,
         QuoteService quote,
+        DeviceConfigService deviceConfig,
         LogService log)
     {
         _ipc = ipc;
         _serial = serial;
         _settings = settings;
         _quote = quote;
+        _deviceConfig = deviceConfig;
         _log = log;
     }
 
@@ -45,6 +48,7 @@ public sealed class PushCoordinator : IDisposable
         _ipc.LessonEvent += OnLessonEvent;
         _ipc.ConnectionChanged += OnConnectionChanged;
         _serial.LineReceived += OnLineReceived;
+        _serial.StateChanged += OnSerialStateChanged;
         _quote.Changed += OnQuoteChanged;
         _periodic = Task.Run(() => PeriodicLoopAsync(_cts.Token));
     }
@@ -74,6 +78,46 @@ public sealed class PushCoordinator : IDisposable
         if (_serial.IsOpen)
         {
             PushQuote("每日一言更新");
+        }
+    }
+
+    private void OnSerialStateChanged(bool connected)
+    {
+        // 设备断了就清掉配置镜像，界面显示「—」，不要拿旧值冒充。
+        if (!connected)
+        {
+            _deviceConfig.Clear();
+        }
+    }
+
+    private void HandleConfig(string line)
+    {
+        try
+        {
+            var message = JsonSerializer.Deserialize<ConfigMessage>(line);
+            if (message is null)
+            {
+                return;
+            }
+
+            _deviceConfig.Update(new DeviceConfig(
+                message.Refresh,
+                message.PomoFocus,
+                message.PomoBreak,
+                message.Rotate,
+                message.ArtMode,
+                message.BarMode));
+
+            _log.Info(
+                $"设备配置：刷新={DeviceConfigService.RefreshText(message.Refresh)}" +
+                $" 专注={message.PomoFocus} 分 休息={message.PomoBreak} 分" +
+                $" 轮换={DeviceConfigService.RotateText(message.Rotate)}" +
+                $" 插画={DeviceConfigService.ArtModeText(message.ArtMode)}" +
+                $" 信息条={DeviceConfigService.BarModeText(message.BarMode)}");
+        }
+        catch (JsonException ex)
+        {
+            _log.Warn($"解析设备配置失败：{ex.Message}");
         }
     }
 
@@ -111,6 +155,9 @@ public sealed class PushCoordinator : IDisposable
             case "req":
                 _log.Info("设备请求刷新");
                 PushAll("设备 req");
+                break;
+            case "cfg":
+                HandleConfig(line);
                 break;
             case "status":
                 _log.Info($"设备状态：{line}");

@@ -37,11 +37,11 @@ public sealed partial class MainWindow : Window
 
         // 左键单击托盘图标就把窗口唤回来（右键仍出菜单）。
         // 注意：H.NotifyIcon 默认的 PopupMenu 模式只认 MenuFlyoutItem.Command，不触发 Click 事件。
-        TrayIcon.LeftClickCommand = new DelegateCommand(() => ShowPage(0, "左键"));
-        TrayManageItem.Command = new DelegateCommand(() => ShowPage(0, "菜单：管理页"));
-        TraySettingsItem.Command = new DelegateCommand(() => ShowPage(1, "菜单：设置"));
-        TrayArtworkItem.Command = new DelegateCommand(() => ShowPage(2, "菜单：插画"));
-        TrayQuoteItem.Command = new DelegateCommand(() => ShowPage(3, "菜单：一言"));
+        TrayIcon.LeftClickCommand = new DelegateCommand(() => ShowPage("manage", "左键"));
+        TrayManageItem.Command = new DelegateCommand(() => ShowPage("manage", "菜单：管理页"));
+        TraySettingsItem.Command = new DelegateCommand(() => ShowPage("settings", "菜单：设置"));
+        TrayArtworkItem.Command = new DelegateCommand(() => ShowPage("artwork", "菜单：插画"));
+        TrayQuoteItem.Command = new DelegateCommand(() => ShowPage("quote", "菜单：一言"));
         TrayExitItem.Command = new DelegateCommand(ExitApplication);
 
         _services.Ipc.ConnectionChanged += _ => UpdateTray();
@@ -132,7 +132,7 @@ public sealed partial class MainWindow : Window
         Application.Current.Exit();
     }
 
-    private void ShowPage(int index, string reason)
+    private void ShowPage(string tag, string reason)
     {
         _services.Log.Info($"托盘唤起：{reason}");
 
@@ -148,10 +148,24 @@ public sealed partial class MainWindow : Window
             _services.Log.Warn($"唤回窗口失败：{ex.Message}");
         }
 
-        if (index >= 0 && index < Nav.MenuItems.Count)
+        var item = FindNavItem(tag);
+        if (item is not null)
         {
-            Nav.SelectedItem = Nav.MenuItems[index];
+            Nav.SelectedItem = item;
         }
+    }
+
+    private NavigationViewItem? FindNavItem(string tag)
+    {
+        foreach (var entry in Nav.MenuItems.Concat(Nav.FooterMenuItems))
+        {
+            if (entry is NavigationViewItem item && (item.Tag as string) == tag)
+            {
+                return item;
+            }
+        }
+
+        return null;
     }
 
     private void UpdateTray()

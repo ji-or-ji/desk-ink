@@ -21,6 +21,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- 设备端真字库，随工具打包（合成预览用） -->
+    <Content Include="..\software\font\font16_simsun.bin">
+      <Link>Assets\font16_simsun.bin</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\software\font\ascii8x16.bin">
+      <Link>Assets\ascii8x16.bin</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260804001" />
     <PackageReference Include="ClassIsland.Shared.Ipc" Version="2.1.0.1" />
     <PackageReference Include="System.IO.Ports" Version="8.0.0" />

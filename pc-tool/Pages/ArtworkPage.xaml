@@ -195,31 +195,51 @@
 
             <Border Grid.Row="1" Style="{StaticResource CardStyle}">
                 <StackPanel Spacing="12">
-                    <Grid ColumnSpacing="12">
+                    <Grid ColumnSpacing="12" RowSpacing="12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
                         <ComboBox
                             x:Name="FitCombo"
                             Header="缩放方式"
                             HorizontalAlignment="Stretch"
                             SelectionChanged="FitCombo_SelectionChanged">
-                            <ComboBoxItem Content="手动裁剪" Tag="Manual" />
+                            <ComboBoxItem Content="裁剪填充（不变形）" Tag="Cover" />
                             <ComboBoxItem Content="拉伸" Tag="Stretch" />
                             <ComboBoxItem Content="留白" Tag="Contain" />
                         </ComboBox>
+
+                        <ComboBox
+                            x:Name="PreviewModeCombo"
+                            Grid.Column="1"
+                            Header="预览模式"
+                            HorizontalAlignment="Stretch"
+                            SelectionChanged="PreviewModeCombo_SelectionChanged">
+                            <ComboBoxItem Content="仅插画" Tag="ImageOnly" />
+                            <ComboBoxItem Content="全屏 + 实心条" Tag="FullSolid" />
+                            <ComboBoxItem Content="全屏 + 反色条" Tag="FullInvert" />
+                            <ComboBoxItem Content="全屏 + 反色自适应" Tag="FullAuto" />
+                            <ComboBoxItem Content="小窗模式" Tag="SmallWindow" />
+                        </ComboBox>
+
                         <NumberBox
                             x:Name="ThresholdBox"
-                            Grid.Column="1"
+                            Grid.Row="1"
                             Header="阈值（0..255，关抖动时生效）"
                             Maximum="255"
                             Minimum="0"
                             SpinButtonPlacementMode="Compact"
                             ValueChanged="ThresholdBox_ValueChanged" />
+
                         <StackPanel
-                            Grid.Column="2"
+                            Grid.Row="1"
+                            Grid.Column="1"
                             VerticalAlignment="Bottom"
                             Orientation="Horizontal"
                             Spacing="16">

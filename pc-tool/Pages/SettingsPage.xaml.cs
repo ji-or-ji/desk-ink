@@ -13,6 +13,40 @@ public sealed partial class SettingsPage : Page
         InitializeComponent();
         LoadSettings();
         RefreshPorts();
+
+        _services.DeviceConfig.Changed += RefreshDeviceConfig;
+        RefreshDeviceConfig();
+    }
+
+    private void RefreshDeviceConfig()
+    {
+        Ui.Post(() =>
+        {
+            var config = _services.DeviceConfig.Current;
+            if (config is null)
+            {
+                // 未连接 / 还没收到 cfg：一律显示「—」，绝不显示默认值。
+                CfgRefreshText.Text = "—";
+                CfgPomoFocusText.Text = "—";
+                CfgPomoBreakText.Text = "—";
+                CfgRotateText.Text = "—";
+                CfgArtModeText.Text = "—";
+                CfgBarModeText.Text = "—";
+            }
+            else
+            {
+                CfgRefreshText.Text = DeviceConfigService.RefreshText(config.Refresh);
+                CfgPomoFocusText.Text = DeviceConfigService.MinutesText(config.PomoFocus);
+                CfgPomoBreakText.Text = DeviceConfigService.MinutesText(config.PomoBreak);
+                CfgRotateText.Text = DeviceConfigService.RotateText(config.Rotate);
+                CfgArtModeText.Text = DeviceConfigService.ArtModeText(config.ArtMode);
+                CfgBarModeText.Text = DeviceConfigService.BarModeText(config.BarMode);
+            }
+
+            CfgSyncText.Text = _services.DeviceConfig.LastSync is { } time
+                ? $"最近同步：{time:HH:mm:ss}"
+                : "最近同步：—";
+        });
     }
 
     private void LoadSettings()

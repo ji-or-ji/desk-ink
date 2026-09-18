@@ -48,6 +48,84 @@
                 </StackPanel>
             </Border>
 
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="设备配置" />
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel Spacing="12">
+                    <Grid ColumnSpacing="24" RowSpacing="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="刷新档位" />
+                        <TextBlock x:Name="CfgRefreshText" Grid.Column="1" Text="—" />
+
+                        <TextBlock
+                            Grid.Row="1"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="番茄钟专注" />
+                        <TextBlock
+                            x:Name="CfgPomoFocusText"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="—" />
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="番茄钟休息" />
+                        <TextBlock
+                            x:Name="CfgPomoBreakText"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Text="—" />
+
+                        <TextBlock
+                            Grid.Row="3"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="小窗轮换" />
+                        <TextBlock
+                            x:Name="CfgRotateText"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Text="—" />
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="插画显示" />
+                        <TextBlock
+                            x:Name="CfgArtModeText"
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Text="—" />
+
+                        <TextBlock
+                            Grid.Row="5"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="信息条" />
+                        <TextBlock
+                            x:Name="CfgBarModeText"
+                            Grid.Row="5"
+                            Grid.Column="1"
+                            Text="—" />
+                    </Grid>
+
+                    <TextBlock
+                        x:Name="CfgSyncText"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="最近同步：—" />
+                </StackPanel>
+            </Border>
+
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="启动" />
             <Border Style="{StaticResource CardStyle}">
                 <ToggleSwitch x:Name="AutoStartSwitch" Header="开机自启（注册表 Run 项）" />

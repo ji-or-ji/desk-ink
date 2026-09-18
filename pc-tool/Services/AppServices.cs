@@ -11,7 +11,8 @@ public sealed class AppServices : IDisposable
         Serial = new SerialLinkService(Log);
         Quote = new QuoteService(Settings, Log);
         Artwork = new ArtworkService(Serial, Log);
-        Push = new PushCoordinator(Ipc, Serial, Settings, Quote, Log);
+        DeviceConfig = new DeviceConfigService();
+        Push = new PushCoordinator(Ipc, Serial, Settings, Quote, DeviceConfig, Log);
     }
 
     public SettingsService Settings { get; }
@@ -26,20 +27,60 @@ public sealed class AppServices : IDisposable
 
     public ArtworkService Artwork { get; }
 
+    public DeviceConfigService DeviceConfig { get; }
+
+    /// <summary>设备端真字库，合成预览用；找不到则为 null。</summary>
+    public DeviceFont? DeviceFont { get; private set; }
+
     public PushCoordinator Push { get; }
+
+    private readonly object _serialLock = new();
 
     public void Start()
     {
-        Settings.Changed += ApplySerialSettings;
-        ApplySerialSettings();
+        Settings.Changed += OnSettingsChanged;
+
+        // 串口枚举/打开、字库读取都可能阻塞（蓝牙 COM 口尤其），一律放到后台线程，
+        // 否则会卡在 UI 线程上——表现为「窗口出来了但整个点不动」。
+        _ = Task.Run(() =>
+        {
+            ApplySerialSettings();
+            LoadDeviceFont();
+        });
 
         Ipc.Start();
         Quote.Start();
         Push.Start();
     }
 
-    /// <summary>按设置里的端口名/自动发现结果打开串口。</summary>
+    private void OnSettingsChanged() => _ = Task.Run(ApplySerialSettings);
+
+    private void LoadDeviceFont()
+    {
+        try
+        {
+            DeviceFont = DeviceFont.TryLoadDefault();
+            Log.Info(DeviceFont is null
+                ? "未找到设备字库（Assets/font16_simsun.bin / ascii8x16.bin），合成预览不显示文字"
+                : "已加载设备字库，合成预览可用");
+        }
+        catch (Exception ex)
+        {
+            DeviceFont = null;
+            Log.Warn($"加载设备字库失败：{ex.Message}");
+        }
+    }
+
+    /// <summary>按设置里的端口名/自动发现结果打开串口（可能阻塞，别在 UI 线程直接调）。</summary>
     public void ApplySerialSettings()
+    {
+        lock (_serialLock)
+        {
+            ApplySerialSettingsCore();
+        }
+    }
+
+    private void ApplySerialSettingsCore()
     {
         var settings = Settings.Current;
         var ports = SerialLinkService.GetPortNames();

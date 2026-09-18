@@ -117,6 +117,18 @@ public sealed class TodoMessage
     [JsonPropertyName("items")] public List<TodoItem> Items { get; set; } = new();
 }
 
+/// <summary>设备 → PC 的配置上报（只读镜像）。</summary>
+public sealed class ConfigMessage
+{
+    [JsonPropertyName("t")] public string T { get; set; } = "cfg";
+    [JsonPropertyName("refresh")] public int Refresh { get; set; }
+    [JsonPropertyName("pomo_focus")] public int PomoFocus { get; set; }
+    [JsonPropertyName("pomo_break")] public int PomoBreak { get; set; }
+    [JsonPropertyName("rotate")] public int Rotate { get; set; }
+    [JsonPropertyName("art_mode")] public int ArtMode { get; set; }
+    [JsonPropertyName("bar_mode")] public int BarMode { get; set; }
+}
+
 public sealed class ImgBeginMessage
 {
     [JsonPropertyName("t")] public string T { get; set; } = "img_begin";

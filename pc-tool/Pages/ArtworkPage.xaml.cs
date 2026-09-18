@@ -22,9 +22,14 @@ public sealed partial class ArtworkPage : Page
     private readonly AppServices _services = App.Instance.Services;
     private readonly ObservableCollection<ArtworkEntry> _entries = new();
 
+    private const string BarLeftPlaceholder = "09:40";
+    private const string BarRightPlaceholder = "第3节 数学";
+
     private ArtworkEntry? _selected;
     private CancellationTokenSource? _uploadCts;
     private bool _initialized;
+    private bool _previewModeTouched;
+    private bool _updatingPreviewMode;
 
     private Rect _imageRect;
     private Rect _cropRect;
@@ -44,12 +49,86 @@ public sealed partial class ArtworkPage : Page
         InvertSwitch.IsOn = false;
         ThresholdBox.Value = 128;
 
+        // 合成模式默认跟随设备上报的 art_mode / bar_mode，没上报才回落到「仅插画」。
+        _updatingPreviewMode = true;
+        PreviewModeCombo.SelectedIndex = IndexOfPreviewMode(PreviewModeFromDevice());
+        _updatingPreviewMode = false;
+
         _initialized = true;
         UpdateThresholdEnabled();
         UpdateEmptyHint();
         UpdateCropEnabled();
 
         _services.Artwork.UploadProgress += OnUploadProgress;
+        _services.DeviceConfig.Changed += OnDeviceConfigChanged;
+    }
+
+    private static ArtworkPreviewMode PreviewModeFromDevice(DeviceConfig? config)
+    {
+        if (config is null)
+        {
+            return ArtworkPreviewMode.ImageOnly;
+        }
+
+        if (config.ArtMode == 1)
+        {
+            return ArtworkPreviewMode.SmallWindow;
+        }
+
+        return config.BarMode switch
+        {
+            0 => ArtworkPreviewMode.FullSolid,
+            1 => ArtworkPreviewMode.FullInvert,
+            2 => ArtworkPreviewMode.FullAuto,
+            _ => ArtworkPreviewMode.ImageOnly
+        };
+    }
+
+    private ArtworkPreviewMode PreviewModeFromDevice() => PreviewModeFromDevice(_services.DeviceConfig.Current);
+
+    private static int IndexOfPreviewMode(ArtworkPreviewMode mode) => mode switch
+    {
+        ArtworkPreviewMode.FullSolid => 1,
+        ArtworkPreviewMode.FullInvert => 2,
+        ArtworkPreviewMode.FullAuto => 3,
+        ArtworkPreviewMode.SmallWindow => 4,
+        _ => 0
+    };
+
+    private void OnDeviceConfigChanged()
+    {
+        if (_previewModeTouched)
+        {
+            return;
+        }
+
+        Ui.Post(() =>
+        {
+            _updatingPreviewMode = true;
+            PreviewModeCombo.SelectedIndex = IndexOfPreviewMode(PreviewModeFromDevice());
+            _updatingPreviewMode = false;
+            RefreshPreview();
+        });
+    }
+
+    private ArtworkPreviewMode SelectedPreviewMode
+        => ((PreviewModeCombo.SelectedItem as ComboBoxItem)?.Tag as string) switch
+        {
+            "FullSolid" => ArtworkPreviewMode.FullSolid,
+            "FullInvert" => ArtworkPreviewMode.FullInvert,
+            "FullAuto" => ArtworkPreviewMode.FullAuto,
+            "SmallWindow" => ArtworkPreviewMode.SmallWindow,
+            _ => ArtworkPreviewMode.ImageOnly
+        };
+
+    private void PreviewModeCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_initialized && !_updatingPreviewMode)
+        {
+            _previewModeTouched = true;
+        }
+
+        RefreshPreview();
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -284,10 +363,37 @@ public sealed partial class ArtworkPage : Page
         if (_selected is null)
         {
             PreviewImage.Source = null;
+            PreviewTitleText.Text = "1-bit 预览";
             return;
         }
 
-        var (width, height) = (_selected.Width, _selected.Height);
+        byte[] mono;
+        int width;
+        int height;
+
+        switch (SelectedPreviewMode)
+        {
+            case ArtworkPreviewMode.FullSolid:
+                (mono, width, height) = ComposeFull(BarMode.Solid);
+                break;
+            case ArtworkPreviewMode.FullInvert:
+                (mono, width, height) = ComposeFull(BarMode.Invert);
+                break;
+            case ArtworkPreviewMode.FullAuto:
+                (mono, width, height) = ComposeFull(BarMode.Auto);
+                break;
+            case ArtworkPreviewMode.SmallWindow:
+                mono = CompositeRenderer.ComposeSmallWindow(
+                    GetMonoForSize(CompositeRenderer.PanelWidth, CompositeRenderer.PanelHeight));
+                width = CompositeRenderer.FullWidth;
+                height = CompositeRenderer.FullHeight;
+                break;
+            default:
+                mono = _selected.Mono;
+                width = _selected.Width;
+                height = _selected.Height;
+                break;
+        }
 
         // 取能塞进预览区的最大的整数放大倍数，其余交给 Image 的 Uniform 自适应。
         var scale = 1;
@@ -298,8 +404,46 @@ public sealed partial class ArtworkPage : Page
             scale = Math.Max(1, (int)Math.Floor(Math.Min(hostWidth / width, hostHeight / height)));
         }
 
-        PreviewImage.Source = ArtworkService.Render(_selected.Mono, width, height, scale);
-        PreviewTitleText.Text = $"1-bit 预览 · {width}×{height} · {_selected.Mono.Length} 字节";
+        PreviewImage.Source = ArtworkService.Render(mono, width, height, scale);
+        PreviewTitleText.Text = $"1-bit 预览 · {width}×{height} · {mono.Length} 字节";
+    }
+
+    private (byte[] Mono, int Width, int Height) ComposeFull(BarMode barMode)
+    {
+        var image = GetMonoForSize(CompositeRenderer.FullWidth, CompositeRenderer.FullHeight);
+        var composed = CompositeRenderer.ComposeFull(
+            image,
+            barMode,
+            _services.DeviceFont,
+            BarLeftPlaceholder,
+            BarRightPlaceholder);
+        return (composed, CompositeRenderer.FullWidth, CompositeRenderer.FullHeight);
+    }
+
+    /// <summary>取指定尺寸的 1-bit 图：尺寸一致就用现成的，否则按当前参数重新处理。</summary>
+    private byte[] GetMonoForSize(int width, int height)
+    {
+        var entry = _selected!;
+        if (entry.Width == width && entry.Height == height)
+        {
+            return entry.Mono;
+        }
+
+        if (entry.Source is null)
+        {
+            return entry.Mono;
+        }
+
+        var baseOptions = CurrentOptions();
+        var options = baseOptions with
+        {
+            TargetWidth = width,
+            TargetHeight = height,
+            CropRect = null,
+            Fit = baseOptions.CropRect is null ? baseOptions.Fit : ArtworkFit.Cover
+        };
+
+        return MonoBitmap.ToMonoBitmap(entry.Source, options);
     }
 
     // ---------------------------------------------------------------- 裁剪编辑器
