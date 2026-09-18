@@ -21,6 +21,8 @@
 
 static const char *TAG = "app";
 
+#define APP_FW_VER "0.1.0"
+
 /* ---------- 配置项（NVS namespace "deskink"，见 变更-配置页.md / 变更-显示侧.md） ---------- */
 #define CFG_KEY_REFRESH    "cfg_refresh"
 #define CFG_KEY_POMO_FOCUS "cfg_pomo_focus"
@@ -207,6 +209,20 @@ static void apply_display_modes(void)
 {
     ui_set_art_mode(s_cfg.art_mode);
     ui_set_bar_mode(s_cfg.bar_mode);
+}
+
+/* 把当前配置全量报给 PC（hello 之后 / 配置页保存之后） */
+static void push_cfg(void)
+{
+    link_cfg_t c = {
+        .refresh    = s_cfg.refresh,
+        .pomo_focus = s_cfg.pomo_focus,
+        .pomo_break = s_cfg.pomo_break,
+        .rotate     = s_cfg.rotate,
+        .art_mode   = s_cfg.art_mode,
+        .bar_mode   = s_cfg.bar_mode,
+    };
+    link_send_cfg(&c);
 }
 
 /* ---------- 待办持久化 / 回传 ---------- */
@@ -413,11 +429,13 @@ static void handle_input(input_event_t ev)
         } else if (ev == INPUT_CENTER_SHORT) {
             config_set_value(s_cfg_item, s_cfg_value);
             config_save_item(s_cfg_item);
+            push_cfg();
             render_state();
             present();
         } else if (ev == INPUT_CENTER_LONG) {
             config_set_value(s_cfg_item, s_cfg_value);
             config_save_all();
+            push_cfg();
             enter_menu();
         }
         break;
@@ -574,6 +592,7 @@ static void app_task(void *arg)
                 if (s_state == ST_CONFIG) {
                     config_set_value(s_cfg_item, s_cfg_value);
                     config_save_all();
+                    push_cfg();
                 }
                 enter_idle();
                 s_idle_ticks = 0;
@@ -720,12 +739,18 @@ esp_err_t app_start(void)
 
     config_load();
     apply_display_modes();
+#if !CONFIG_APP_SKIP_INPUT
     input_init();
+#endif
 
     link_set_rx_callback(on_link_msg);
     esp_err_t err = link_init();
     if (err != ESP_OK) {
         ESP_LOGW(TAG, "link_init failed: %s", esp_err_to_name(err));
+    } else {
+        /* 上电握手，紧跟着把设备当前配置报给 PC */
+        link_send_hello(APP_FW_VER);
+        push_cfg();
     }
 
     load_pool_texts();

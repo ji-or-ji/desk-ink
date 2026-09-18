@@ -1,0 +1,11 @@
+build/
+sdkconfig
+sdkconfig.old
+sdkconfig.qemu
+sdkconfig.qemu.old
+managed_components/
+*.pyc
+__pycache__/
+.vscode/c_cpp_properties.json
+*.perj2
+*.pdfrtyyyyyyyyyyyyyyy

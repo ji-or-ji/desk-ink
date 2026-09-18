@@ -3,3 +3,9 @@
 CONFIG_ESP_CONSOLE_UART_DEFAULT=y
 # CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG is not set
 CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+
+# QEMU 不模拟 ADC 自校准，跳过 input（否则 adc_oneshot_new_unit 死循环）
+CONFIG_APP_SKIP_INPUT=y
+
+# QEMU 不模拟墨水屏 SPI，跳过 eink 初始化
+CONFIG_APP_SKIP_EINK=y

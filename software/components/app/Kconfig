@@ -1,0 +1,17 @@
+menu "Desk-ink app"
+
+    config APP_SKIP_INPUT
+        bool "Skip five-way switch init (QEMU/emulation only)"
+        default n
+        help
+            adc_oneshot_new_unit() 会做 ADC 自校准，QEMU 不模拟该外设，
+            会死循环。仿真时打开本项跳过 input 初始化。
+
+    config APP_SKIP_EINK
+        bool "Skip e-ink panel init (QEMU/emulation only)"
+        default n
+        help
+            QEMU 不模拟墨水屏 SPI，eink_init() 的 SPI 传输会卡住。
+            仿真时打开本项跳过 eink 初始化（flush 变 no-op）。
+
+endmenu

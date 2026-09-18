@@ -80,10 +80,14 @@ void app_main(void)
     ESP_ERROR_CHECK(font_init(font16_simsun_bin_start, cjk_len,
                               ascii8x16_bin_start, ascii_len));
 
+#if CONFIG_APP_SKIP_EINK
+    ESP_LOGW(TAG, "APP_SKIP_EINK: skip panel init");
+#else
     esp_err_t eink_err = eink_init();
     if (eink_err != ESP_OK) {
         ESP_LOGW(TAG, "eink_init failed (%s), continue without panel", esp_err_to_name(eink_err));
     }
+#endif
     ESP_ERROR_CHECK(ui_init());
 
     i2c_master_bus_handle_t bus = i2c_bus_init();

@@ -8,7 +8,7 @@ New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 $enc = [System.Text.Encoding]::GetEncoding('gb2312')
 $list = New-Object 'System.Collections.Generic.List[string]'
 for ($q = 1; $q -le 55; $q++) {
-    if ($q -ge 3 -and $q -le 15) { continue }   # 1-2 区符号，16-55 区一级汉字
+    if ($q -ge 4 -and $q -le 15) { continue }   # 1-3 区符号，16-55 区一级汉字
     $maxW = if ($q -eq 55) { 89 } else { 94 }
     for ($w = 1; $w -le $maxW; $w++) {
         $b = [byte[]]@([byte]($q + 0xA0), [byte]($w + 0xA0))

@@ -42,6 +42,16 @@ typedef struct {
     todo_item_t  items[LINK_TODO_MAX];
 } todo_list_t;
 
+/* 设备端配置全量（字段名 = NVS key 去掉 cfg_ 前缀） */
+typedef struct {
+    int refresh;      /* 0 自动 / 1 常规 / 2 静默 */
+    int pomo_focus;   /* 15 / 25 / 45 */
+    int pomo_break;   /* 5 / 10 */
+    int rotate;       /* 0 关 / 1 开 */
+    int art_mode;     /* 0 全屏 / 1 小窗 */
+    int bar_mode;     /* 0 实心 / 1 反色 / 2 反色自适应 */
+} link_cfg_t;
+
 typedef enum {
     MSG_SCHEDULE,
     MSG_NEWS,
@@ -70,6 +80,7 @@ esp_err_t link_init(void);
 
 esp_err_t link_send_schedule(const schedule_t *s);
 esp_err_t link_send_todo(const todo_list_t *list);
+esp_err_t link_send_cfg(const link_cfg_t *cfg);
 esp_err_t link_send_req(const char *what);
 esp_err_t link_send_hello(const char *fw_ver);
 esp_err_t link_send_status(int bat_mv);

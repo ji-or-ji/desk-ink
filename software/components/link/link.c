@@ -409,6 +409,20 @@ esp_err_t link_send_schedule(const schedule_t *s)
     return uart_write_line(buf);
 }
 
+esp_err_t link_send_cfg(const link_cfg_t *cfg)
+{
+    if (cfg == NULL) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    char buf[LINK_LINE_MAX];
+    snprintf(buf, sizeof(buf),
+             "{\"t\":\"cfg\",\"refresh\":%d,\"pomo_focus\":%d,\"pomo_break\":%d,"
+             "\"rotate\":%d,\"art_mode\":%d,\"bar_mode\":%d}",
+             cfg->refresh, cfg->pomo_focus, cfg->pomo_break,
+             cfg->rotate, cfg->art_mode, cfg->bar_mode);
+    return uart_write_line(buf);
+}
+
 esp_err_t link_send_todo(const todo_list_t *list)
 {
     if (list == NULL) {
