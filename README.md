@@ -12,7 +12,7 @@
 > **这一条请先读。** 截至 2026-09-18：
 
 - ✅ **代码能编译**（ESP-IDF v6.0.1 / ESP32-C3，app 分区余约 72%）
-- ✅ **UI 渲染可在 QEMU 仿真里验证**（见 `docs/desk-eink-info/qemu-验证.md`）
+- ✅ **UI 已在 QEMU 里逐状态验证**——17 张实图见下的「界面预览」
 - ✅ **PC 端工具能编译**（.NET 8 / WinUI 3，0 警告 0 错误）
 - ❌ **没有点亮过真实的墨水屏**
 - ❌ **没有连接过真实硬件**（串口 / 蓝牙 / ADC / RTC 全都没跑过）
@@ -22,6 +22,19 @@
 刷屏参数都还是按规格书推算的，**首次实机调试大概率需要调整**。
 
 配合的实机流程我写在 [`点灯清单`](docs/desk-eink-info/点灯清单.md) 里（分段上电，便于定位问题）。
+
+---
+
+## 界面预览
+
+下面这些是**固件真代码在 QEMU 里渲染出来的**（不是设计稿，也不是复刻）：
+
+| 空闲（每日一言） | 菜单 | 待办 |
+|---|---|---|
+| ![IDLE](docs/desk-eink-info/qemu-tour/00-IDLE-quote.png) | ![MENU](docs/desk-eink-info/qemu-tour/07-MENU.png) | ![TODO](docs/desk-eink-info/qemu-tour/14-TODO_NAV.png) |
+
+全部 **17 个状态**（含配置页六项、全屏插画×三种信息条、番茄钟等）在
+`docs/desk-eink-info/qemu-tour/`。
 
 ---
 
