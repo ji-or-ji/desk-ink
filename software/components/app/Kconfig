@@ -14,4 +14,22 @@ menu "Desk-ink app"
             QEMU 不模拟墨水屏 SPI，eink_init() 的 SPI 传输会卡住。
             仿真时打开本项跳过 eink 初始化（flush 变 no-op）。
 
+    config APP_QEMU_TOUR
+        bool "Auto-tour all UI states at boot (QEMU/emulation only)"
+        default n
+        help
+            开机后自动把各个界面状态走一遍（IDLE/MENU/CONFIG/TODO/POMO/
+            全屏插画 × 三种信息条/小窗插画），逐步导出 framebuffer。
+            配合 APP_QEMU_DUMP_B64 精确出图，用于无硬件时验证渲染。
+            默认关，不影响正常运行。
+
+    config APP_QEMU_DUMP_B64
+        bool "Dump framebuffer as base64 in QEMU tour"
+        default n
+        depends on APP_QEMU_TOUR
+        help
+            每步把 15000 字节 framebuffer 以 base64 打到控制台
+            （约 100 行），主机端还原成 PNG。
+            比 dump_fb_ascii() 的 100×30 粗采样精确得多。
+
 endmenu
