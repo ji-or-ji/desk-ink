@@ -220,14 +220,15 @@ void qemu_tour_run(void)
     ui_render_idle();
     step("IDLE-news");
 
-    /* 3. IDLE 插画进小窗 */
+    /* 3. IDLE 插画进小窗（池里 2=全屏图 img_1，3=小窗图 img_2） */
     ui_set_art_mode(1);
-    ui_pool_set_current(2);
+    ui_pool_set_current(3);
     ui_render_idle();
     step("IDLE-art-panel");
 
-    /* 4-6. 全屏插画 + 信息条三模式 */
+    /* 4-6. 全屏插画 + 信息条三模式（切回全屏图 img_1） */
     ui_set_art_mode(0);
+    ui_pool_set_current(2);
     ui_set_bar_mode(UI_BAR_SOLID);
     ui_render_idle();
     step("FULL-bar-solid");
