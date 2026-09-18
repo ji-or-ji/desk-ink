@@ -93,14 +93,26 @@ ASCII 打到日志，那就是**真代码渲染出来的画面**。
 
 ---
 
-## 五、拿到 ASCII 之后
+## 五、拿到精确画面：FB64 + 状态巡视
 
-`dump_fb_ascii` 是 100×30 的粗采样，够看版面、不够看小字。两条路：
+`dump_fb_ascii` 是 100×30 的粗采样，够看版面、不够看小字。现在有精确方案：
 
-1. **先用它**：把 ASCII 转回 PNG，验证布局与信息条位置
-2. **要精度**：让固件额外支持「把 framebuffer 以 hex 打到串口」，主机端还原成精确位图
+| 开关（默认 n） | 作用 |
+|---|---|
+| `CONFIG_APP_QEMU_DUMP_B64` | 把 framebuffer（15000 B）base64 打到串口，格式 `FB64 BEGIN 15000 <label>` … `FB64 END` |
+| `CONFIG_APP_QEMU_TOUR` | 开机自动渲染全部 UI 状态，每步 dump 一次（`select` 上面的 dump） |
 
-第 2 条需要动固件，属于 `变更-显示侧.md` 的延伸。
+```powershell
+# 构建（带巡视开关，注意独立 SDKCONFIG）
+idf.py -B build-qemu -D SDKCONFIG=sdkconfig.qemu `
+  -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.qemu.defaults" build
+# 合并 flash 后跑 QEMU，把串口日志存成文件，再还原 PNG：
+pwsh -File tools\fb64-decode.ps1 -Log <日志文件> -OutDir .\fb64 -Scale 2
+```
+
+巡视产出 **17 帧**（IDLE 一言/新闻/小窗插画、全屏插画三种信息条、空池、
+MENU、CONFIG 六项、TODO_NAV/EDIT、POMO）。样例见 `docs/desk-eink-info/qemu-tour/`。
+两个开关默认关闭，正常构建行为不变。
 
 ---
 

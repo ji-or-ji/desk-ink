@@ -128,9 +128,21 @@ FB64 END
 
 ---
 
-## 八、待澄清
+## 八、待澄清（已澄清）
 
-2026-09-18 复跑时，固件停在 `eFuse: calibration ... does not match` 之后、`app_main` 之前，
-与 `qemu-验证.md` 记录的「跑到 `app started`」**不一致**。
-怀疑是 **LittleFS 首次格式化（2.5 MB）在 QEMU 里很慢**。
-实现巡视前先确认这一点——否则巡视还没开始就被卡住了。
+先前复跑停在 `eFuse: calibration ...` 之后、`app_main` 之前，**不是 LittleFS 慢**，
+而是 `input_init()` 里 `adc_oneshot_new_unit()` 的 ADC 自校准——QEMU 不模拟该外设，死循环。
+根 `sdkconfig` 被 QEMU 覆盖污染时也会造成「换个构建就卡住」的错觉。
+
+`APP_SKIP_INPUT` / `APP_SKIP_EINK` + 独立 `-D SDKCONFIG=sdkconfig.qemu` 之后稳定跑通；
+LittleFS 首次格式化在 QEMU 里约 1 秒，不是瓶颈。
+
+---
+
+## 九、实现结果（2026-09-18）
+
+- 新增 `components/app/qemu_tour.c` + 两个 Kconfig（`APP_QEMU_TOUR` / `APP_QEMU_DUMP_B64`，默认 `n`）。
+- 巡视实际产出 **17 帧**：表格的 11 行里，CONFIG 展开为 6 项，另补了「内容池为空」以对齐 `render-states.ps1`。
+- 主机端 `tools/fb64-decode.ps1` 还原 PNG；一份样例已存到 `docs/desk-eink-info/qemu-tour/`。
+- 验收：17 段 `FB64 BEGIN/END`，全部长度 15000；各帧黑像素分布符合预期
+  （实心条约 12400 黑、反色/自适应不同、空池有占位、六项配置值块各异）。
