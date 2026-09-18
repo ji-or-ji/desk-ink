@@ -770,14 +770,6 @@ esp_err_t app_start(void)
     present();
     dump_fb_ascii(100, 30);
 
-#if CONFIG_APP_QEMU_TOUR
-    /* 仿真巡视：在 app_task 起来之前跑完，避免并发重绘 */
-    {
-        extern void qemu_tour_run(void);
-        qemu_tour_run();
-    }
-#endif
-
     if (xTaskCreate(app_task, "app_task", 4096, NULL, 5, NULL) != pdPASS) {
         return ESP_ERR_NO_MEM;
     }
