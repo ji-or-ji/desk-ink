@@ -26,6 +26,10 @@
 
 static const char *TAG = "tour";
 
+#ifndef APP_TOUR_HAS_PHOTO
+#define APP_TOUR_HAS_PHOTO 0   /* 由组件 CMake 在 testdata 存在时置 1 */
+#endif
+
 /* ---------- base64 dump ---------- */
 
 void qemu_dump_fb_b64(const char *label)
@@ -65,7 +69,8 @@ void qemu_dump_fb_b64(const char *label)
 
 #if CONFIG_APP_QEMU_TOUR
 
-/* ---------- 合成插画（走真实“读文件 → 判长度 → blit”路径） ---------- */
+/* ---------- 合成插画（无真实照片时的回退） ---------- */
+#if !APP_TOUR_HAS_PHOTO
 
 static const int s_bayer[4][4] = {
     { 0,  8,  2, 10},
@@ -116,8 +121,26 @@ static void make_scene(uint8_t *buf, int w, int h, int stride)
     }
 }
 
-static void write_synth_images(void)
+#endif /* !APP_TOUR_HAS_PHOTO */
+
+#if APP_TOUR_HAS_PHOTO
+/* 由 target_add_binary_data 生成（software/testdata/art_full.bin / art_panel.bin） */
+extern const uint8_t art_full_bin_start[]  asm("_binary_art_full_bin_start");
+extern const uint8_t art_full_bin_end[]    asm("_binary_art_full_bin_end");
+extern const uint8_t art_panel_bin_start[] asm("_binary_art_panel_bin_start");
+extern const uint8_t art_panel_bin_end[]   asm("_binary_art_panel_bin_end");
+#endif
+
+static void write_tour_images(void)
 {
+#if APP_TOUR_HAS_PHOTO
+    size_t flen = (size_t)(art_full_bin_end - art_full_bin_start);
+    size_t plen = (size_t)(art_panel_bin_end - art_panel_bin_start);
+    esp_err_t e1 = store_write_file("img_1.bin", art_full_bin_start, flen);
+    esp_err_t e2 = store_write_file("img_2.bin", art_panel_bin_start, plen);
+    ESP_LOGI(TAG, "photo images: img_1=%s (%u B) img_2=%s (%u B)",
+             esp_err_to_name(e1), (unsigned)flen, esp_err_to_name(e2), (unsigned)plen);
+#else
     static uint8_t full[EINK_FB_SIZE];                 /* 400×300 */
     static uint8_t panel[((134 + 7) / 8) * 200];       /* 134×200 = 3400 */
 
@@ -129,6 +152,7 @@ static void write_synth_images(void)
     esp_err_t e1 = store_write_file("img_1.bin", full, sizeof(full));
     esp_err_t e2 = store_write_file("img_2.bin", panel, sizeof(panel));
     ESP_LOGI(TAG, "synth images: img_1=%s img_2=%s", esp_err_to_name(e1), esp_err_to_name(e2));
+#endif
 }
 
 /* ---------- 巡视数据 ---------- */
@@ -180,7 +204,7 @@ static void step(const char *label)
 void qemu_tour_run(void)
 {
     ESP_LOGI(TAG, "QEMU tour start");
-    write_synth_images();
+    write_tour_images();
     setup_data();
     setup_pool();
 
