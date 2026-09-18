@@ -1,0 +1,13 @@
+# Bad Apple demo 的 QEMU 覆盖层
+# 用法：
+#   idf.py -B build-qemu-badapple -D SDKCONFIG=sdkconfig.qemu.badapple \
+#     -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.qemu.defaults;sdkconfig.badapple.defaults" build
+#
+# 关掉 UI 状态巡视，让 demo 入口先生效（APP_DEMO_BADAPP 在 app_start 里直接返回）
+
+CONFIG_APP_DEMO_BADAPP=y
+CONFIG_DEMO_EMBED_BUNDLE=y
+CONFIG_DEMO_MAX_FRAMES=8
+CONFIG_DEMO_DUMP_EVERY=1
+CONFIG_DEMO_BADAPP_LOOPS=1
+# CONFIG_APP_QEMU_TOUR is not set

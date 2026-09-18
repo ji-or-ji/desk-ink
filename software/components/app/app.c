@@ -20,6 +20,9 @@
 #include "store.h"
 #include "rtc.h"
 #include "power.h"
+#if CONFIG_APP_DEMO_BADAPP
+#include "demo.h"
+#endif
 
 static const char *TAG = "app";
 
@@ -734,6 +737,10 @@ static void seed_placeholder_data(void)
 
 esp_err_t app_start(void)
 {
+#if CONFIG_APP_DEMO_BADAPP
+    /* demo 入口：不重构既有状态机，直接切到 Bad Apple 播放器 */
+    return demo_badapple_start();
+#else
     s_msgq = xQueueCreate(4, sizeof(parsed_msg_t));
     if (s_msgq == NULL) {
         return ESP_ERR_NO_MEM;
@@ -791,4 +798,5 @@ esp_err_t app_start(void)
 
     ESP_LOGI(TAG, "app started (state=IDLE)");
     return ESP_OK;
+#endif
 }

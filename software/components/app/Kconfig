@@ -32,4 +32,11 @@ menu "Desk-ink app"
             开机后依次渲染 IDLE/MENU/CONFIG/TODO/POMO/全屏插画等状态，
             每步 dump 一次 framebuffer。只驱动渲染路径，不走 input_poll。
 
+    config APP_DEMO_BADAPP
+        bool "Boot into Bad Apple demo instead of normal UI"
+        default n
+        help
+            开机直接进 Bad Apple 播放器（components/demo），跑完再返回。
+            只在 app_start 加一个入口分支，不改既有状态机。
+
 endmenu
