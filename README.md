@@ -34,12 +34,15 @@
 | <img src="docs/desk-eink-info/qemu-tour/00-IDLE-quote.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/01-IDLE-news.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/07-MENU.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/14-TODO_NAV.png" width="200"> |
 | **配置页·刷新档位** | **配置页·信息条** | **待办编辑** | **番茄钟** |
 | <img src="docs/desk-eink-info/qemu-tour/08-CONFIG-refresh.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/13-CONFIG-bar-mode.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/15-TODO_EDIT.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/16-POMO.png" width="200"> |
+| **全屏插画·实心条** | **全屏插画·反色条** | **全屏插画·自适应** | **插画小窗** |
+| <img src="docs/desk-eink-info/qemu-tour/03-FULL-bar-solid.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/04-FULL-bar-invert.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/05-FULL-bar-auto.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/02-IDLE-art-panel.png" width="200"> |
 
 全部 **17 个状态**在 `docs/desk-eink-info/qemu-tour/`（含配置页六项、插画小窗、
 全屏插画 × 三种信息条模式）。
 
-> 📌 全屏插画那三帧（`03`/`04`/`05`）正在换成真实照片素材重出——
-> 因为原来的内置合成图太暗（整屏 90% 以上是黑的），看不出信息条压在图上到底读不读得清。
+> 📌 最后一行那四帧用的是**真实照片素材**（灰度 → 4×4 有序抖动 → 1-bit）。
+> 信息条三种模式的差别一眼可见：顶部 64px 条带的墨点占比分别是
+> **96% / 39% / 60%**——实心是纯黑条，反色和自适应则取决于底下那张图。
 
 ---
 
