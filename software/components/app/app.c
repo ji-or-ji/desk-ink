@@ -1,5 +1,7 @@
 #include "app.h"
 
+#include "sdkconfig.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -769,6 +771,19 @@ esp_err_t app_start(void)
     render_state();
     present();
     dump_fb_ascii(100, 30);
+
+#if CONFIG_APP_QEMU_DUMP_B64 && !CONFIG_APP_QEMU_TOUR
+    {
+        extern void qemu_dump_fb_b64(const char *label);
+        qemu_dump_fb_b64("boot");
+    }
+#endif
+#if CONFIG_APP_QEMU_TOUR
+    {
+        extern void qemu_tour_run(void);
+        qemu_tour_run();
+    }
+#endif
 
     if (xTaskCreate(app_task, "app_task", 4096, NULL, 5, NULL) != pdPASS) {
         return ESP_ERR_NO_MEM;

@@ -9,3 +9,7 @@ CONFIG_APP_SKIP_INPUT=y
 
 # QEMU 不模拟墨水屏 SPI，跳过 eink 初始化
 CONFIG_APP_SKIP_EINK=y
+
+# 状态巡视：开机渲染所有 UI 状态并把 framebuffer 以 base64 打出
+CONFIG_APP_QEMU_TOUR=y
+CONFIG_APP_QEMU_DUMP_B64=y

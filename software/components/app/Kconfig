@@ -14,4 +14,22 @@ menu "Desk-ink app"
             QEMU 不模拟墨水屏 SPI，eink_init() 的 SPI 传输会卡住。
             仿真时打开本项跳过 eink 初始化（flush 变 no-op）。
 
+    config APP_QEMU_DUMP_B64
+        bool "Dump framebuffer as base64 (QEMU/emulation only)"
+        default n
+        help
+            把 framebuffer（15000 字节）base64 打到串口，格式：
+              FB64 BEGIN 15000 <label>
+              <每行 200 字符>
+              FB64 END
+            主机端 tools/fb64-decode.ps1 可还原成精确 1-bit 图。
+
+    config APP_QEMU_TOUR
+        bool "Auto-render all UI states on boot (QEMU/emulation only)"
+        default n
+        select APP_QEMU_DUMP_B64
+        help
+            开机后依次渲染 IDLE/MENU/CONFIG/TODO/POMO/全屏插画等状态，
+            每步 dump 一次 framebuffer。只驱动渲染路径，不走 input_poll。
+
 endmenu
