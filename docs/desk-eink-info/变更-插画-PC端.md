@@ -1,7 +1,7 @@
 # 设计变更请求 — PC 端新增「插画上传」
 
 > 日期：2026-09-17
-> 面向：编码工具（opencode）
+> **面向：PC 工具会话**（opencode）。只改 `pc-tool/`。
 > 背景：你已完成 PC 工具的骨架（`App.xaml`、`MainWindow`、两个页面、十个 Service）。
 > 本次新增一个功能，**只动 PC 端（`pc-tool/`）**，固件不用改。
 
