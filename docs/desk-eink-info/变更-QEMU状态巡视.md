@@ -106,3 +106,31 @@ FB64 END
 - `qemu-验证.md` —— QEMU 跑通的配方与四个坑
 - `tools/render-states.ps1` —— 期望结果的参照（复刻版）
 - `docs/desk-eink-info/点灯清单.md` —— 这份做完之后，清单第四节以后才是周末的活
+
+---
+
+## 七、实现提示（来自一次未完成的尝试，供参考）
+
+- **只调 `ui.h` 的公开 API**，不要依赖 `app.c` 的内部状态（`s_state` 等）。
+  可用：`ui_set_schedule/todo/date/clock`、`ui_set_art_mode/bar_mode`、
+  `ui_pool_clear/set_text/set_images/set_current`、`ui_render_idle/menu/config/todo_nav/todo_edit/pomo`。
+  这样巡视是**独立文件**，不侵入 app.c。
+- **挂载点**：`app_start()` 里 `dump_fb_ascii(100,30)` 之后、`xTaskCreate(app_task, ...)` **之前**
+  —— 巡视跑完才起 app_task，不会并发重绘。
+  用 `#if CONFIG_APP_QEMU_TOUR` 包一个 `extern void qemu_tour_run(void);` + 调用即可，不必改 `app.h`。
+- **插画**：不要直接往 framebuffer 画，而是**把合成的 400×300 / 134×200 位图写进 LittleFS**
+  （`store_write_file("img_1.bin", ...)`），再 `ui_pool_set_images()`
+  —— 这样走的是真实的「读文件 → 判长度 → blit」路径。
+- **base64 输出**：每行 200 字符，末尾 `fflush(stdout)`；BEGIN/END 各带标签，主机好切块。
+- **构建**：`idf.py qemu` 会重建 flash 镜像，**必须带上同一个 `-D SDKCONFIG=...`**，
+  否则 root 那份 sdkconfig 会盖回来。
+- 注意：CLI 传参时别把 idf.py 的 `-B` 直接放在 python 后面（`python -B` 是 python 自己的旗标）。
+
+---
+
+## 八、待澄清
+
+2026-09-18 复跑时，固件停在 `eFuse: calibration ... does not match` 之后、`app_main` 之前，
+与 `qemu-验证.md` 记录的「跑到 `app started`」**不一致**。
+怀疑是 **LittleFS 首次格式化（2.5 MB）在 QEMU 里很慢**。
+实现巡视前先确认这一点——否则巡视还没开始就被卡住了。

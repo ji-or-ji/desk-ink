@@ -114,7 +114,12 @@ ClassIsland ──IPC──▶ 本工具 ──SerialPort──▶ 蓝牙 SPP �
 ### 已定
 
 1. **待办推送的入口**：推送开关放**设置页**（`PushTodo`），管理页只读展示。
-2. **开机自启**：注册表 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`，值名 `DeskInk.PcTool`。
+2. **开机自启**：**注册表 Run 项，不走启动文件夹**（已实现，`AutoStartService`）——
+   键 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`，值名 `DeskInk.PcTool`，
+   值为带引号的 exe 全路径（保存时取 `Environment.ProcessPath`）。
+   设置页开关以**注册表为准**（`IsEnabled()` 直接读该值），点保存时写/删。
+   注意：路径是保存那一刻的，挪了目录要重新保存一次。
+   > 自启目前**会显示主窗口**（和手动启动一样）；要不要改成静默进托盘见下方「仍待定」。
 3. **「手动推送测试」按钮**：已做，在管理页右上。
 4. **每日一言来源**：默认走**公益源**（一言 hitokoto，`https://v1.hitokoto.cn/`）；设置页可切换
    「手动填写 / 自定义网址 / 本地文件」。每天取一条（跨天自动刷新），可点「立即获取」。
@@ -133,6 +138,8 @@ ClassIsland ──IPC──▶ 本工具 ──SerialPort──▶ 蓝牙 SPP �
 1. **观感细节**：沿用 Fluent 默认，还是自定义配色
 2. **插画抹除**：`protocol.md` 没有删除消息，等固件侧方案定了再补
 3. **插画 id 同步**：设备端不回报已有列表，PC 本地自增 id 可能与设备失步（已知限制）
+4. **自启是否静默进托盘**：现在自启和手动启动一样会弹主窗口。托盘工具通常自启时只留托盘图标，
+   待定：加个「启动时最小化到托盘」开关，还是自启就一律静默。
 
 ---
 
