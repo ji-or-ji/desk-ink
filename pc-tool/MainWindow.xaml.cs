@@ -70,6 +70,9 @@ public sealed partial class MainWindow : Window
         UpdateTray();
     }
 
+    /// <summary>缩到托盘（自启时用，也供「关闭」复用）。</summary>
+    public void HideToTray() => ShowWindow(_hwnd, SwHide);
+
     private void OnClosing(AppWindow sender, AppWindowClosingEventArgs args)
     {
         if (_reallyExit)

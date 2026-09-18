@@ -150,6 +150,7 @@ public sealed partial class SettingsPage : Page
         PeriodicSecondsBox.Value = settings.PeriodicPushSeconds;
         PushTodoSwitch.IsOn = settings.PushTodo;
         AutoStartSwitch.IsOn = AutoStartService.IsEnabled();
+        StartMinimizedSwitch.IsOn = settings.StartMinimizedToTray;
 
         PushNewsSwitch.IsOn = settings.PushNews;
         NewsFeedUrlBox.Text = settings.NewsFeedUrl;
@@ -214,6 +215,7 @@ public sealed partial class SettingsPage : Page
             : (int)Math.Clamp(PeriodicSecondsBox.Value, 10, 3600);
         settings.PushTodo = PushTodoSwitch.IsOn;
         settings.AutoStart = AutoStartSwitch.IsOn;
+        settings.StartMinimizedToTray = StartMinimizedSwitch.IsOn;
         if (PortCombo.SelectedItem is string port)
         {
             settings.PortName = port;

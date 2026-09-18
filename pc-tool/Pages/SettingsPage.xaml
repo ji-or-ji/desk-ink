@@ -177,7 +177,10 @@
 
             <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="启动" />
             <Border Style="{StaticResource CardStyle}">
-                <ToggleSwitch x:Name="AutoStartSwitch" Header="开机自启（注册表 Run 项）" />
+                <StackPanel Spacing="12">
+                    <ToggleSwitch x:Name="AutoStartSwitch" Header="开机自启（注册表 Run 项）" />
+                    <ToggleSwitch x:Name="StartMinimizedSwitch" Header="启动时最小化到托盘" />
+                </StackPanel>
             </Border>
 
             <StackPanel Orientation="Horizontal" Spacing="12">

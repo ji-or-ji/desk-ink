@@ -33,8 +33,17 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         Instance = this;
+
+        var startMinimized = _services.Settings.Current.StartMinimizedToTray;
         MainWindow = new MainWindow(_services);
         MainWindow.Activate();
+
+        if (startMinimized)
+        {
+            // 先 Activate 让托盘图标建出来，再立刻藏掉。
+            MainWindow.HideToTray();
+        }
+
         _services.Start();
     }
 }

@@ -20,6 +20,9 @@ public sealed class AppSettings
 
     public bool AutoStart { get; set; }
 
+    /// <summary>启动时是否直接最小化到托盘（自启场景默认开）。</summary>
+    public bool StartMinimizedToTray { get; set; } = true;
+
     public bool PushQuote { get; set; } = true;
 
     public QuoteSourceKind QuoteSource { get; set; } = QuoteSourceKind.Hitokoto;
