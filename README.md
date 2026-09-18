@@ -31,11 +31,11 @@
 
 | 空闲·每日一言 | 空闲·新闻 | 菜单 | 待办 |
 |---|---|---|---|
-| <img src="docs/desk-eink-info/qemu-tour/00-IDLE-quote.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/01-IDLE-news.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/07-MENU.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/14-TODO_NAV.png" width="200"> |
-| **配置页·刷新档位** | **配置页·信息条** | **待办编辑** | **番茄钟** |
-| <img src="docs/desk-eink-info/qemu-tour/08-CONFIG-refresh.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/13-CONFIG-bar-mode.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/15-TODO_EDIT.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/16-POMO.png" width="200"> |
-| **全屏插画·实心条** | **全屏插画·反色条** | **全屏插画·自适应** | **插画小窗** |
-| <img src="docs/desk-eink-info/qemu-tour/03-FULL-bar-solid.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/04-FULL-bar-invert.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/05-FULL-bar-auto.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/02-IDLE-art-panel.png" width="200"> |
+| ![空闲·每日一言](docs/desk-eink-info/qemu-tour/00-IDLE-quote.png) | ![空闲·新闻](docs/desk-eink-info/qemu-tour/01-IDLE-news.png) | ![菜单](docs/desk-eink-info/qemu-tour/07-MENU.png) | ![待办](docs/desk-eink-info/qemu-tour/14-TODO_NAV.png) |
+| 配置页·刷新档位 | 配置页·信息条 | 待办编辑 | 番茄钟 |
+| ![配置页·刷新档位](docs/desk-eink-info/qemu-tour/08-CONFIG-refresh.png) | ![配置页·信息条](docs/desk-eink-info/qemu-tour/13-CONFIG-bar-mode.png) | ![待办编辑](docs/desk-eink-info/qemu-tour/15-TODO_EDIT.png) | ![番茄钟](docs/desk-eink-info/qemu-tour/16-POMO.png) |
+| 全屏插画·实心条 | 全屏插画·反色条 | 全屏插画·自适应 | 插画小窗 |
+| ![全屏插画·实心条](docs/desk-eink-info/qemu-tour/03-FULL-bar-solid.png) | ![全屏插画·反色条](docs/desk-eink-info/qemu-tour/04-FULL-bar-invert.png) | ![全屏插画·自适应](docs/desk-eink-info/qemu-tour/05-FULL-bar-auto.png) | ![插画小窗](docs/desk-eink-info/qemu-tour/02-IDLE-art-panel.png) |
 
 全部 **17 个状态**在 `docs/desk-eink-info/qemu-tour/`（含配置页六项、插画小窗、
 全屏插画 × 三种信息条模式）。
