@@ -55,6 +55,10 @@ esp_err_t eink_flush_partial(int x, int y, int w, int h)
 - 固件端播放器 / demo
 - **`eink_flush_partial` 的实现**（已跟固件会话打过招呼，它不会同时动 `eink`）
 
+> **接口要按“日常也能用”来设计**：允许只刷一个小区域，允许调用方要求“刷干净”（慢一点无所谓）。
+> Bad Apple 的“高频大区域”是它的一个用法，不是它的定义。desk-ink 自己真正需要的是“刷新时不闪屏”，
+> 而不是“刷得快”。所以别把 LUT 写死成只有快模式。
+
 **不归你：**
 
 - 不碰 `ui` / `font` / `link` / `store` / `rtc` / `power` 这些组件
