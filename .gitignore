@@ -45,3 +45,4 @@ __pycache__/
 
 # ---------- QEMU 构建目录 ----------
 software/build-qemu/
+software/sdkconfig.qemu
