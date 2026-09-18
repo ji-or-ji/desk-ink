@@ -118,6 +118,7 @@ PC 推送中文待办，或 ESP32 回传本地改动，两个方向用同一类�
 | 类型 | 示例 | 用途 |
 |---|---|---|
 | `hello` | `{"t":"hello","fw":"0.1.0"}` | 上电握手，PC 收到后全量推一次 |
+| `cfg` | `{"t":"cfg","refresh":1,"pomo_focus":25,"pomo_break":5,"rotate":1,"art_mode":0,"bar_mode":0}` | 上报设备六项配置（`hello` 后 / 配置页保存后），全量、字段名=NVS key 去 `cfg_` 前缀 |
 | `ack` | `{"t":"ack","for":"schedule"}` | 确认收到某类消息 |
 | `req` | `{"t":"req","what":"schedule"}` | 主动请求刷新（如五向开关切换、唤醒后） |
 | `status` | `{"t":"status","bat":3.85}` | 状态上报（电池电压等） |
@@ -128,6 +129,7 @@ PC 推送中文待办，或 ESP32 回传本地改动，两个方向用同一类�
 
 ```
 ESP32 上电 ──hello──▶ PC
+ESP32 ──cfg────▶ PC              （设备当前配置全量）
 PC ──schedule──▶ ESP32          （首次全量）
 PC ──quote────▶ ESP32
 
@@ -140,6 +142,9 @@ ESP32 从深睡唤醒
 
 五向开关切到下一屏
    ESP32 本地切换（不联网）
+
+配置页保存
+   ESP32 ──cfg──▶ PC
 ```
 
 PC 端订阅 ClassIsland 的 `OnClassNotifyId` / `OnBreakingTimeNotifyId` / `OnAfterSchoolNotifyId` / `CurrentTimeStateChangedNotifyId`，事件触发就推一次 `schedule`。
