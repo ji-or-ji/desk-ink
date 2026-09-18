@@ -128,7 +128,7 @@ app 内占用估算：
 |---|---|
 | ESP-IDF 基础 | ~800 KB ~ 1 MB |
 | 自己的代码 | ~100 KB（估） |
-| 字库（`font16_simsun.bin`） | 131 KB |
+| 字库（`font16_simsun.bin`） | 134 KB |
 | ASCII 字库 | 1.5 KB |
 
 **结论：4MB 相当宽裕。** 插画 15 KB/张，LittleFS 的 2.4 MB 能存 150 张以上。待办回传（`protocol.md` 待定项 1）在空间上不构成约束。

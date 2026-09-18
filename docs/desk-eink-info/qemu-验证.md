@@ -53,21 +53,37 @@ entry 0x403cbf1a          ← 二级 bootloader 入口
 
 ---
 
-## 四、配方（下一步要跑的）
+## 四、配方（已跑通，2026-09-18）
 
-给 QEMU 单独一份 console 覆盖：`software/sdkconfig.qemu.defaults`
+两个前提：
+
+1. **QEMU 缺 `libiconv-2.dll`**（本机装包不全），需把它所在的目录加进 PATH。本机可用
+   `C:\Program Files\Hanako\resources\git\mingw64\bin`（任何带 MinGW `libiconv-2.dll` 的目录都行）。
+2. **QEMU 不模拟 ADC 自校准和墨水屏 SPI**，会死循环。用两个开关跳过：
+   `CONFIG_APP_SKIP_INPUT` / `CONFIG_APP_SKIP_EINK`（见 `components/app/Kconfig`）。
 
 ```powershell
-# 1) 载入 IDF 环境
+# 1) 环境
 . 'C:\Espressif\tools\Microsoft.v6.0.1.PowerShell_profile.ps1'
-$env:PATH = 'C:\Espressif\tools\qemu-riscv32\esp_develop_9.2.2_20250817\qemu\bin;' + $env:PATH
+$env:PATH = 'C:\Program Files\Hanako\resources\git\mingw64\bin;C:\Espressif\tools\qemu-riscv32\esp_develop_9.2.2_20250817\qemu\bin;' + $env:PATH
 Set-Location '<工作目录>\desk-ink\software'
 
-# 2) 独立 build 目录，套上 console 覆盖（不动主构建）
-idf.py -B build-qemu -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.qemu.defaults" build
+# 2) 独立 build 目录 + 独立 sdkconfig（关键：不要把 console/skip 覆盖写进主 sdkconfig）
+idf.py -B build-qemu -D SDKCONFIG=sdkconfig.qemu `
+  -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.qemu.defaults" build
 
-# 3) 跑
-idf.py -B build-qemu qemu
+# 3) 合并 flash（idf.py qemu 会自动做，这里手动以便自己控制运行）
+esptool --chip=esp32c3 merge-bin --output=build-qemu/qemu_flash.bin --pad-to-size=4MB `
+  --flash-mode dio --flash-freq 80m --flash-size 4MB `
+  0x0 build-qemu/bootloader/bootloader.bin `
+  0x8000 build-qemu/partition_table/partition-table.bin `
+  0x10000 build-qemu/desk-ink.bin
+
+# 4) 跑（QEMU 会阻塞，外部限时/手动退出）
+qemu-system-riscv32 -M esp32c3 `
+  -drive file=build-qemu/qemu_flash.bin,if=mtd,format=raw `
+  -global driver=timer.esp32c3.timg,property=wdt_disable,value=true `
+  -nic user,model=open_eth -nographic
 ```
 
 跑起来后，固件里 `app.c` 的 `dump_fb_ascii(100, 30)` 会把 framebuffer 降采样成
@@ -104,46 +120,41 @@ ASCII 打到日志，那就是**真代码渲染出来的画面**。
 
 ---
 
-## 七、本机实测：QEMU 能跑，但 console 覆盖一开始没生效（2026-09-18 更正）
+## 七、本机实测：QEMU 已端到端跑通（2026-09-18）
 
-### 先前结论有误
-
-2026-09-17 曾记录「QEMU 跑不起来、缺 DLL」，**该结论不成立**。
-
-复现结果：`qemu-system-riscv32.exe` 的 `--version` 和完整仿真**都正常**；
-`bin\` 里没有 DLL 是**正常的**（可执行文件静态链接，不依赖外部运行库）。
-
-> 判据很硬：若真缺运行库，`--version` 也会失败。它不失败。
-
-### 真正的原因
-
-`build-qemu` 里 `CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG` 仍为 1 —— 第四节给的
-`-D SDKCONFIG_DEFAULTS=...` **没有生效**。
-
-原因：`SDKCONFIG_DEFAULTS` 只在**生成新 sdkconfig** 时起作用。项目根的
-`sdkconfig` 早已存在，其中显式设置压过了 defaults。
-
-### 正确做法
-
-改**根 `sdkconfig`**（它是生成物、已被 gitignore），而不是塞 defaults：
+固件在 QEMU 里跑到 `app started`，`dump_fb_ascii` 出图，`hello` / `cfg` 都发出：
 
 ```
-CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=n
-CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+I main: desk-ink booting
+E esp_littlefs: Corrupted dir pair at {0x0, 0x1}
+W esp_littlefs: mount failed, (-84). formatting...
+I store: LittleFS mounted: 8192/2555904 bytes used
+I store: NVS ready (namespace 'deskink')
+I font: loaded 4037 CJK glyphs + 96 ASCII glyphs
+I app: image pool: 0 file(s)
+I link: UART0 ready: TX=21 RX=20 115200 8N1
+{"t":"hello","fw":"0.1.0"}
+{"t":"cfg","refresh":1,"pomo_focus":25,"pomo_break":5,"rotate":1,"art_mode":0,"bar_mode":0}
+I app: framebuffer preview (100x30):
+I app: .....#...###...#..#...........
+...
+I app: app started (state=IDLE)
 ```
 
-改完重建，`build-qemu/config/sdkconfig.h` 里应出现 `CONFIG_ESP_CONSOLE_UART_DEFAULT`。
-**不做实验时记得改回 USB Serial/JTAG。**
+### 踩过的四个坑
 
-### 验证结果（已复现）
+| 现象 | 原因 | 解法 |
+|---|---|---|
+| 秒退，退出码 `0xC0000135` | **确实缺 `libiconv-2.dll`**（`llvm-objdump -p` 可见导入；`bin\` 里没有） | 把含该 DLL 的目录（本机 `C:\Program Files\Hanako\resources\git\mingw64\bin`）加进 PATH |
+| 卡在 `eFuse: calibration ...` 之后 | `adc_oneshot_new_unit()` 的 ADC 自校准 QEMU 不模拟，死循环 | `CONFIG_APP_SKIP_INPUT=y` |
+| 卡在 `font: loaded ...` 之后 | 墨水屏 SPI QEMU 不模拟 | `CONFIG_APP_SKIP_EINK=y` |
+| 主构建被 console/skip 覆盖污染 | 两个 build 共用根 `sdkconfig` | 加 `-D SDKCONFIG=sdkconfig.qemu`，别改根 sdkconfig |
 
-固件在 QEMU 里正常启动：
+> 关于 `--version`：本机 `qemu-system-riscv32.exe --version` 在补齐 `libiconv-2.dll`
+> 前**确实返回 `0xC0000135`**，补齐后正常。所以「静态链接、不缺库」的说法在本机不成立。
 
-```
-boot: ESP-IDF v6.0.1 2nd stage bootloader
-boot: Loaded app from partition at offset 0x10000
-app_init: Project name:     desk-ink
-spi_flash: detected chip: gd
-```
+### 顺带发现的真 bug（已修）
 
-目前在 `spi_flash` 之后停住，`app_main` 的日志尚未出现 —— **下一步查这里**。
+第一次跑到渲染时出现 `font: missing glyph U+FF0C`。
+根因：`build_font.ps1` 只取 GB2312 **1~2 区**，而全角 `，！？：；（）` 在 **3 区**。
+已改为取 **1~3 区**，字库 3943 → **4037 字 / 134 KB**，缺字消失；相关文档已同步。
