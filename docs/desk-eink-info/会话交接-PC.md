@@ -27,35 +27,35 @@
 |---|---|
 | `变更-插画-PC端.md` | ✅ **完成**（`ArtworkService` / `MonoBitmap` / `ArtworkPage`）。只有**实际串口上传没测**（没硬件） |
 | `变更-PC配置显示与预览.md` | ✅ **完成**（`DeviceConfigService` / `DeviceFont` / `CompositeRenderer` / `MonoCanvas`） |
-| `变更-新闻-PC端.md` | ❌ **未开始**（没有 `NewsService`，`pc-tool` 里搜不到 `news`） |
-| `变更-待办-PC端.md` | ❌ **未开始**（没有 `TodoPage`，导航里也没有「待办」） |
+| `变更-新闻-PC端.md` | ✅ **完成**（`NewsService` + 设置页「新闻」区；RSS/Atom、网址、文件、手动四种源） |
+| `变更-待办-PC端.md` | ✅ **完成**（`TodoPage` + `BuildTodoChunks` 分片 + 设备回传重组） |
 
 ### 当前界面现状
 
-导航栏：`管理` / `插画` / `一言` / `设置` —— **待办还没有位置**。
+导航栏：`管理` / `插画` / `一言` / `待办`（设置固定在左下角 footer）。
 
-服务层已有的：`ArtworkService`、`QuoteService`、`DeviceConfigService`、`DeviceFont`、
+服务层已有的：`ArtworkService`、`QuoteService`、`NewsService`、`DeviceConfigService`、`DeviceFont`、
 `CompositeRenderer`、`MonoCanvas`、`PushCoordinator`、`ClassIslandIpcService` 等。
+
+> 另：启动时把串口枚举/打开、字库读取放到了后台线程（原来在 UI 线程上会「窗口出来但点不动」），
+> 并加了单实例锁。
 
 ---
 
 ## 三、待办那条链的真实状态（重要）
 
-**`BuildTodo` 还是单帧版，没分片：**
+**已改为分片**（`ProtocolBuilder.BuildTodoChunks`，每片 2 条，带 `seq`/`total`）：
 
 ```csharp
-public static string BuildTodo(IEnumerable<TodoItem> items)
-    => JsonSerializer.Serialize(new TodoMessage { Items = items.Take(8).ToList() }, Options);
+public const int TodoItemsPerChunk = 2;
+public static IReadOnlyList<string> BuildTodoChunks(IEnumerable<TodoItem> items);
 ```
 
-单条的 JSON 固定开销就有 **30 字节**（`{"id":1,"done":true,"text":""}`）：
+`PushCoordinator.PushTodo` 逐帧发、片间 20ms；`HandleTodo` 按 `seq`/`total` 重组
+（`seq == 0` 清空重来、跳号丢弃），收齐后整体覆盖 `settings.Todos` 并触发 `TodoUpdated`。
+实测 8 条 × 14 汉字 = 4 片，最大帧 **132 字节**（< 255）。
 
-- **8 条即使文本全空也已 269 字节** > 255 上限
-- 装 14 个汉字约 **590 字节**，2.3 倍
-
-所以必须改成分片（每片 2 条，带 `seq`/`total`）。
-
-另外：`settings.Todos` 这个集合**目前没有任何界面能填** —— 这正是要新建 `TodoPage` 的原因。
+`settings.Todos` 现在由「待办」页维护（增/删/勾选，≤8 条、单条 ≤14 汉字）。
 
 ---
 
@@ -80,10 +80,9 @@ public static string BuildTodo(IEnumerable<TodoItem> items)
 
 ## 五、下一步（按优先级）
 
-1. **待办页面**（`变更-待办-PC端.md`）：新建 `TodoPage`（照 `QuotePage` 的模子），
-   导航加一项；增/删/勾选；`BuildTodo` 改分片；接收设备回传时累加重组
-2. **新闻**（`变更-新闻-PC端.md`）：新建 `NewsService`（照 `QuoteService`），四种源
-3. 硬件到手后：实测串口上传链路
+1. **硬件到手后实测**：串口上传链路（插画分片、待办分片、schedule/quote/news）
+2. 设备端那份 `变更-待办-设备端.md` 落地后，联调「设备勾选 → PC 列表跟着变」
+3. 观感细节（配色、托盘图标状态）——仍是待定项
 
 ---
 
