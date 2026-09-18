@@ -1,0 +1,162 @@
+# 会话交接：Bad Apple 墨水屏 demo
+
+> **面向：新的 opencode 会话**
+> 你跟前两个会话（硬件/固件、PC 工具）**不互通**，所有上下文都在这份文档里。
+> 仓库：`<工作目录>\desk-ink`
+
+---
+
+## 一、你是谁，要做什么
+
+你要在 desk-ink 这块墨水屏上做出一个 **Bad Apple 播放 demo**。
+
+先说清目的：**这不是做一个视频播放器产品，是把局部刷新压到极限的一次压力测试。**
+
+desk-ink 是个桌面墨水屏信息站（4.2 寸 400×300 黑白，ESP32-C3，省电是设计主线）。省电靠的是"只重画变了的区域"，也就是**局部刷新**。而现在固件里：
+
+```c
+esp_err_t eink_flush_partial(int x, int y, int w, int h)
+{
+    (void)x; (void)y; (void)w; (void)h;
+    /* 需要独立 LUT，留到整屏跑通之后 */
+    return ESP_ERR_NOT_SUPPORTED;
+}
+```
+
+**一个 stub。** 单帧测试发现不了刷新链路的深层问题（残影、BUSY 超时、连续刷时卡死），连续刷几百帧能。
+
+**验收标准：从 PC 连续播放 30 秒，画面能认出是 Bad Apple，不卡死、不花屏。**
+
+---
+
+## 二、硬约束（先算账，别绕）
+
+| 项 | 数 |
+|---|---|
+| 单帧数据量 | 400×300 1bpp = **15000 字节** |
+| 全刷耗时 | 约 **2 秒/帧**（按规格书推算） |
+| 局部刷耗时 | 约 **0.3 到 0.5 秒/帧**（推算，待实测） |
+| flash | **4 MB**（还要装程序 + 文件系统） |
+
+推出来的三条结论：
+
+1. **全刷方案不可行**（0.5 fps，看不出是动画）。这事只有靠局部刷新才成立。
+2. **裸帧装不下**。3 分半按 2fps 算约 420 帧 ≈ **6.3 MB**，超了。必须压缩（或流式）。
+3. **别走蓝牙**。协议是 255 字节一条的 JSON 行，15000 字节要切成 **60 到 100 个分片**。921600 波特下传输约 **0.22 秒/帧**（够用），115200 下要 **1.7 秒**（不够）。蓝牙 SPP 实际吞吐更低。**Bad Apple 走 USB 串口。**
+
+---
+
+## 三、范围边界（重要，防止跟固件会话撞车）
+
+**归你这个会话：**
+
+- PC 端转换工具链（视频 → 1-bit 帧序列 → 压缩）
+- 帧格式定义与压缩编解码
+- 固件端播放器 / demo
+- **`eink_flush_partial` 的实现**（已跟固件会话打过招呼，它不会同时动 `eink`）
+
+**不归你：**
+
+- 不碰 `ui` / `font` / `link` / `store` / `rtc` / `power` 这些组件
+- **不改协议里已有的 JSON 结构**。要加字段，先写一份变更请求（格式见 `docs/desk-eink-info/` 下现有的 `变更-*.md`）
+- 不动 `app` 的既有状态机。可以在 `app.c` 里加一个 **Kconfig 控制的 demo 入口分支**，但不重构它
+- **声音不做**（先把画面跑通）
+
+**硬件没到之前调不了 LUT 参数** —— 先把骨架、接口、工具链做出来，参数留给实测。
+
+---
+
+## 四、你手上现成的资产
+
+| 资产 | 位置 | 能拿来干什么 |
+|---|---|---|
+| **抖动算法参考实现** | `tools/render-preview.ps1` | 居中裁 4:3 → 灰度 → **4×4 Bayer 有序抖动** → 1-bit。**这正是 Bad Apple 抽帧要的处理**，把输入从"单张照片"换成"帧序列"就行 |
+| **分片传输协议** | `docs/desk-eink-info/protocol.md` | `img_begin` / `img_chunk` / `img_end` 可以直接用来推帧 |
+| **eink 驱动** | `software/components/eink/` | `eink_init` / `eink_flush_full` 已实现；`eink_flush_partial` 是 stub，**归你** |
+| **QEMU 验证** | `docs/desk-eink-info/qemu-验证.md` | **没有硬件也能验播放逻辑**，还能导出帧图 |
+| **帧图解码** | `tools/fb64-decode.ps1` | 把日志里的 base64 变成 PNG |
+| **UI 状态渲染** | `software/components/app/qemu_tour.c` | 一份"在 QEMU 里逐个状态出图"的现成范例，照着改就能导 Bad Apple 帧 |
+
+---
+
+## 五、数据格式（照抄，别猜）
+
+**framebuffer 布局**（见 `eink.c`）：
+
+- `400 × 300`，每行 `50` 字节（`EINK_FB_STRIDE`），总计 **15000 字节**
+- 行优先，**每字节高位在前**（`0x80 >> (x & 7)`）
+- **1 = 黑，0 = 白**
+
+**面板极性是反的**：`send_image()` 里做 `~fb[i]` 之后才发给屏（面板 RAM 是 1 = 白）。**你在 framebuffer 这一层工作就行，不用管取反，驱动已经处理了。**
+
+**现成的接口**：
+
+```c
+uint8_t *eink_framebuffer(void);            /* 拿到 15000 字节的 fb */
+void fb_blit_1bit(const uint8_t *data, int x, int y, int w, int h, bool invert);
+esp_err_t eink_flush_full(void);
+esp_err_t eink_flush_partial(int x, int y, int w, int h);   /* 你要实现的 */
+```
+
+`fb_blit_1bit` 的 `data` 也是高位在前、stride `(w+7)/8`、**1 = 黑**。
+
+**SPI 是 10 MHz**（`EINK_CLK_HZ`），满帧 15000 字节约 12 毫秒，**传输不是瓶颈，刷新才是**。
+
+---
+
+## 六、技术路线建议
+
+1. **先做 PC 端**。视频 → 抽帧 → 灰度 → Bayer 抖动 → 1-bit → 压缩 → 落盘。这部分**完全不受硬件限制**，可以一次做透。
+2. **帧格式先简单**。建议 1-bit **RLE**（Bad Apple 大面积纯黑纯白，压得动）。**别一上来就做帧间差分**，先跑通再优化。
+3. **固件端播放器**：读帧 → 解压 → 写 fb → flush。循环部分要能处理"下一帧没到"的等待。
+4. **在 QEMU 里验逻辑**，把解码出来的帧导成 PNG，肉眼比对原片。
+5. **硬件到了再调 LUT / 实测帧率**。
+
+---
+
+## 七、硬规则
+
+1. **改动留在工作区，不要 `git commit`。** 由助理审阅后按变更请求分组提交。
+2. **每完成一步就报告**：改了哪些文件、为什么这么改、怎么验证的。
+3. **不要访问 GitHub**（学校网络会监控）。Gitee、百度可以。
+4. **写作风格**：不用 `「」`（用 `""`）、不用破折号 `——`、中英之间不加刻意空格、段落不硬换行。
+5. **新东西放新目录**：PC 端工具进 `tools/badapple/`，固件端进 `software/components/demo/`。别塞进 `app/`。
+6. 拿不准的事**说"不确定"**，别猜。
+
+---
+
+## 八、环境
+
+| 项 | 值 |
+|---|---|
+| ESP-IDF | v6.0.1，`D:\esp-idf\v6.0.1\esp-idf` |
+| 构建 | VS Code `Ctrl+Shift+B`。**别用 CMake Tools**（会套 ARM 工具包） |
+| QEMU 构建 | `idf.py -B build-qemu -D SDKCONFIG=sdkconfig.qemu -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.qemu.defaults" qemu` |
+| QEMU 运行 | 需要 `libiconv-2.dll` 在 PATH（`C:\Program Files\Hanako\resources\git\mingw64\bin` 里有） |
+| .NET SDK | 8.0.425（改 PC 端工具时才用得上） |
+
+---
+
+## 九、交付物
+
+1. `tools/badapple/`（PC 端转换工具 + 自己的 README）
+2. `software/components/demo/`（播放器）
+3. `eink_flush_partial` 的实现
+4. 一份记录：**实测帧率、压缩比、踩到的坑**
+
+---
+
+## 十、已知的坑（跟这个项目有关的）
+
+1. **面板 RAM 极性相反**（1 = 白），驱动里已取反，别重复取反
+2. 墨水屏是**黑白双色**，没有灰阶，中间调只能靠抖动
+3. `eink_flush_full` 之后屏会进 BUSY，**要等它拉低再发下一条命令**
+4. 屏是 **SSD1619AZ**（不是 SSD1680），命令集有差别
+5. **局部刷新需要独立 LUT**，不能复用整屏那套（stub 的注释就是这么写的）
+6. 深睡（`eink_sleep`）之后再刷必须先唤醒，**播放期间不要睡**
+
+---
+
+## 十一、下一步
+
+先做 PC 端工具链，再在 QEMU 里用几帧验证解码与 blit 对不对。等硬件到了，点亮整屏 → 调局部刷新 LUT → 接上真播放。
