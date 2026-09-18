@@ -29,12 +29,17 @@
 
 下面这些是**固件真代码在 QEMU 里渲染出来的**（不是设计稿，也不是复刻）：
 
-| 空闲（每日一言） | 菜单 | 待办 |
-|---|---|---|
-| ![IDLE](docs/desk-eink-info/qemu-tour/00-IDLE-quote.png) | ![MENU](docs/desk-eink-info/qemu-tour/07-MENU.png) | ![TODO](docs/desk-eink-info/qemu-tour/14-TODO_NAV.png) |
+| 空闲·每日一言 | 空闲·新闻 | 菜单 | 待办 |
+|---|---|---|---|
+| <img src="docs/desk-eink-info/qemu-tour/00-IDLE-quote.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/01-IDLE-news.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/07-MENU.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/14-TODO_NAV.png" width="200"> |
+| **配置页·刷新档位** | **配置页·信息条** | **待办编辑** | **番茄钟** |
+| <img src="docs/desk-eink-info/qemu-tour/08-CONFIG-refresh.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/13-CONFIG-bar-mode.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/15-TODO_EDIT.png" width="200"> | <img src="docs/desk-eink-info/qemu-tour/16-POMO.png" width="200"> |
 
-全部 **17 个状态**（含配置页六项、全屏插画×三种信息条、番茄钟等）在
-`docs/desk-eink-info/qemu-tour/`。
+全部 **17 个状态**在 `docs/desk-eink-info/qemu-tour/`（含配置页六项、插画小窗、
+全屏插画 × 三种信息条模式）。
+
+> 📌 全屏插画那三帧（`03`/`04`/`05`）正在换成真实照片素材重出——
+> 因为原来的内置合成图太暗（整屏 90% 以上是黑的），看不出信息条压在图上到底读不读得清。
 
 ---
 
@@ -43,6 +48,29 @@
 如果这个项目对你有用或者有点意思，**欢迎点个 Star**。
 
 说实话，我用它来看有多少人在跟这个进度 —— 也是我继续把它做完的动力。
+
+---
+
+## 这个项目其实是个实验
+
+技术目标（做一块省电的桌面墨水屏）只是外壳。真正想验证的是：
+
+> **在嵌入式这种「软硬交界、规格书满天飞」的场景里，现在的 AI 到底能干多少？能替代掉多少人工？**
+
+所以整个项目里，我刻意**只做两件事：选型、关键决策**。其余调研、方案、文档、编码、
+验证全交给 AI，**不插手**——我就想看它能自己走多远，会在哪里卡住。
+
+| 角色 | 工具 | 地址 |
+|---|---|---|
+| 调研 / 方案 / 文档 / 调度 | **Hanagent** | https://github.com/liliMozi/openhanako |
+| 代码编写 | **OpenCode** | https://opencode.ai |
+| 模型 | **DS4.1 Flash** | — |
+| IDE | **VSCode** | — |
+
+**会话窗口数**（特意控制的）：**OpenCode 用了两个窗口**（分别负责 PC 端小工具与硬件编程，
+互不相通）；**Hanagent 只用了一个窗口**。
+
+→ **详细心得（含 AI 强在哪、栽在哪，以及可复用的规矩）：[`docs/项目心得.md`](docs/项目心得.md)**
 
 ---
 
@@ -148,6 +176,33 @@ desk-ink/
 这两份写着"做到哪了、下一步干什么、有哪些硬规则"。
 
 现有变更请求都在 `docs/desk-eink-info/变更-*.md`，每份标注了**面向哪个会话**。
+
+---
+
+## 图片来源与致谢
+
+「界面预览」里的插画，以及 `docs/desk-eink-info/qemu-tour/` 下的预览帧，
+使用的是第三方插画素材作为**测试图片**：
+
+- **来源**：Wallpaper Engine（小红车）创意工坊
+  https://steamcommunity.com/sharedfiles/filedetails/?id=3551477859
+- **可在 B 站视频** 【“可是国王, 我不想早上梳毛”】 中找到：
+  https://www.bilibili.com/video/BV12aYbzfEzv/
+- **本项目的发布者 / 推荐人**：`_Rubber_`
+- **原作者**（来自该作品的说明）：
+  - 🍁🦊 `@Fox_Teto_`
+  - 画师 `@MAG_inu`
+  - 动画 `@Vimara_Vaeloria`
+  - 音乐 “Blue Roses Falling” — Jake Shimabukuro
+
+**声明**：
+
+- 该素材**版权归原作者所有**。本项目**不主张任何权利**，
+  该素材也**不适用本项目的 GPL-3.0 许可**。
+- 使用它的唯一目的是**验证渲染管线**（灰度 → 有序抖动 → 1-bit → 信息条叠加的可读性）。
+  这张图明暗对比强，恰好能体现「自适应字色」的效果。
+- 如果你喜欢这张图，**请去上面两个链接关注原作者**。
+- 如原作者对本仓库使用该素材有异议，**请联系我，我会立刻移除**。
 
 ---
 
