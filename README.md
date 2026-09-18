@@ -99,6 +99,16 @@
 | **待办** | 列表编辑（≤8 条，每条 ≤14 汉字），分片推送；设备上勾选后会回传，这边列表跟着变 |
 | **设置** | 串口选择与自动发现、推送策略（事件触发 / 定时补推 / 补推间隔） |
 
+实际的界面（点开可看大图）：
+
+| 管理 | 插画 |
+|---|---|
+| ![管理](docs/desk-eink-info/pc-tool-shots/manage.png) | ![插画](docs/desk-eink-info/pc-tool-shots/artwork.png) |
+| 一言 | 待办 |
+| ![一言](docs/desk-eink-info/pc-tool-shots/quote.png) | ![待办](docs/desk-eink-info/pc-tool-shots/todo.png) |
+| 设置 | |
+| ![设置](docs/desk-eink-info/pc-tool-shots/settings.png) | |
+
 **跑起来**：`pc-tool/` 下 `dotnet build`。串口枚举和字库读取放在后台线程，窗口不会假死；支持开机自启（写 `HKCU\...\Run`）和最小化到托盘。
 
 > ⚠️ **串口实传还没测过**，因为没有硬件。消息构造、分片、CRC 都实现并自检过帧长（最大 132 字节，限值 255），但没在真实蓝牙链路上跑通。
