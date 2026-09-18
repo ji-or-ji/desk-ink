@@ -204,6 +204,12 @@ desk-ink/
 
 ---
 
+## 参考资料
+
+**厂商规格书不随仓库分发**（第三方版权）。需要具体的器件手册（墨水屏 DEPG0420、ESP32-C3-WROOM、BQ24073、DS3231、VG6328A、MCP3021、SIQ-02FVS3 等）的话，**开个 Issue 说一声，我单独发给你。**
+
+---
+
 ## 许可
 
 **GNU General Public License v3.0**（见 [`LICENSE`](LICENSE)）。

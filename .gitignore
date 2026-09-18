@@ -48,6 +48,10 @@ software/build-qemu/
 software/sdkconfig.qemu
 software/sdkconfig.qemu.old
 
+# ---------- 厂商文档（第三方版权，不随仓库分发；需要请开 Issue）----------
+docs/*.pdf
+docs/*.html
+
 # ---------- 第三方测试素材 ----------
 # 照片转出的 1-bit 裸数据（可由 tools/photo-to-1bit.ps1 从源图重新生成，不入库）
 software/testdata/
