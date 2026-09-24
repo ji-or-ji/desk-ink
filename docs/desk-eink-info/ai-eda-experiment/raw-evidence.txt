@@ -1,0 +1,315 @@
+AI-EDA 实验原始证据摘录
+会话：新 opencode 会话，分支 dev，未 commit。全部时间 2026-09-24。
+
+============================================================
+[E1] 编辑器进程（开的是仓库正式工程，不是副本）
+============================================================
+Get-CimInstance Win32_Process -Filter "name='lceda-pro.exe'"
+PID 20328  "D:\Program Files\lceda-pro\lceda-pro.exe" "<工作目录>\desk-ink\bord\桌面小摆件.eprj2"
+另有 12560(crashpad) 21996(gpu) 6272(network) 34792(renderer)
+版本：resources/app/package.json -> "version": "3.2.121.e800cf4c"
+
+============================================================
+[E2] Node.js 缺失（会话开始时）
+============================================================
+node --version
+  node: The term 'node' is not recognized as a name of a cmdlet, function, script file, or executable program.
+where.exe node
+  (无输出)
+
+============================================================
+[E3] 49620-49629 无监听（会话开始时）
+============================================================
+Get-NetTCPConnection -State Listen | Where LocalPort 49620..49629
+  (空)
+netstat -ano | findstr ":496[0-4][0-9]"
+  (空)
+
+============================================================
+[E4] 全局 skills 目录无 easyeda-api（安装前）
+============================================================
+Get-ChildItem C:\Users\<user>\.config\opencode -Recurse
+  .gitignore
+  opencode.jsonc
+（无 skills 目录）
+
+============================================================
+[E5] 未安装 Run API Gateway 扩展
+============================================================
+搜索 "run-api-gateway|easyeda-bridge|bded3619"（LCEDA 数据目录 + 安装目录，<2MB 文件）
+  仅 1 处命中：C:\Users\<user>\AppData\Local\LCEDA-Pro\cache.x64.3\IndexedDB\https_client_0.indexeddb.blob\1\00\a4
+  该处上下文是网页缓存（社区扩展 CHANGELOG 提到 run-api-gateway / 49620-49629），非已安装扩展。
+
+搜索用户扩展 extension.json：
+  只有安装目录 app 自带 bundle：
+    assets\chameleon\.../extension.json
+    assets\jerboa\.../extension.json
+    assets\ocr-wizard\.../extension.json
+    assets\pro-api\.../extension.json
+    assets\pro-chat\.../extension.json
+    assets\pro-mgr\.../extension.json
+    assets\pro-panel\.../extension.json
+    assets\pro-pcb\.../extension.json
+    assets\pro-sch\.../extension.json
+    assets\pro-sw\.../extension.json
+    assets\pro-ui\.../extension.json
+    assets\smt-gl-engine\.../extension.json
+    assets\smt-ui\.../extension.json
+  无用户安装的扩展。
+
+============================================================
+[E6] winget 装 Node 失败（源不可达）
+============================================================
+winget install --id OpenJS.NodeJS.LTS -e --silent --accept-package-agreements --accept-source-agreements
+  尝试更新源失败： winget
+  搜索源时失败: msstore
+  执行此命令时发生意外错误:
+  WinHttpSendRequest: 12002: 操作超时
+  0x80072ee2 : unknown error
+  EXITCODE=-2147012894
+
+winget install --id OpenJS.NodeJS.LTS -e --source winget --silent ...
+  尝试更新源失败： winget
+  执行此命令时发生意外错误：
+  InternetOpenUrl() failed.
+  0x80072efd : unknown error
+  EXITCODE=-2147012867
+
+============================================================
+[E7] 直连 nodejs.org 超时，国内镜像可达
+============================================================
+HEAD https://nodejs.org/dist/index.json
+  ERR The request was canceled due to the configured HttpClient.Timeout of 12 seconds elapsing.
+HEAD https://npmmirror.com/mirrors/node/index.json
+  OK 200
+HEAD https://mirrors.tuna.tsinghua.edu.cn/nodejs-release/index.json
+  OK 200
+
+============================================================
+[E8] 便携版 Node 下载与校验
+============================================================
+GET https://npmmirror.com/mirrors/node/v22.20.0/node-v22.20.0-win-x64.zip
+sha256 = bb819d6eb8f5bfda294bbc83a7e4ec6539da67c4233d54b0d655b9248b15e29d
+官方 SHASUMS256.txt 同项 = bb819d6eb8f5bfda294bbc83a7e4ec6539da67c4233d54b0d655b9248b15e29d
+match = True
+解压后：
+  node --version -> v22.20.0
+  npm  --version -> 10.9.3
+位置：C:\Users\<user>\AppData\Local\Temp\opencode\node\node-v22.20.0-win-x64\
+
+============================================================
+[E9] 安装 Skill 依赖
+============================================================
+workdir = C:\Users\<user>\.config\opencode\skills\easyeda-api
+npm install --registry=https://registry.npmmirror.com --no-audit --no-fund
+  added 1 package in 16s
+  node_modules\ws 存在
+
+============================================================
+[E10] Bridge Server 启动横幅（logs/bridge.out.log）
+============================================================
+EasyEDA WebSocket Bridge Server
+Port:        49620
+Listen Host: 127.0.0.1 (localhost only)
+Port Range:  49620-49629
+Service ID:  easyeda-bridge
+HTTP API:    http://localhost:49620
+WS (EDA):    ws://localhost:49620/eda
+WS (Agent):  ws://localhost:49620/agent
+Endpoints:
+  GET  /health
+  POST /execute
+
+============================================================
+[E11] Bridge 健康检查（AI 侧链路已通）
+============================================================
+GET http://127.0.0.1:49620/health
+{"service":"easyeda-bridge","status":"ok","edaConnected":false,"edaWindowCount":0,"activeWindowId":null,"pendingRequests":0,"timestamp":1790223048027}
+
+GET http://127.0.0.1:49620/eda-windows
+{"windows":[],"activeWindowId":null,"count":0}
+
+============================================================
+[E12] 撞墙：向 EDA 发执行请求
+============================================================
+POST http://127.0.0.1:49620/execute   {"code":"return 1+1;"}
+HTTP 500
+{"success":false,"error":"No EDA window connected. Please connect an EDA window first."}
+
+POST http://127.0.0.1:49620/eda-windows/select   {"windowId":"nope"}
+HTTP 404
+{"error":"EDA window \"nope\" not found"}
+
+注：bridge-server.mjs 里 503 分支判断错误消息包含 "not connected"，但实际消息 "No EDA window connected..." 不含该子串，故落 500。
+
+============================================================
+[E13] 扩展导入是 GUI + 登录（前端代码证据）
+============================================================
+文件：D:\Program Files\lceda-pro\resources\app\assets\pro-ui\3.2.120.508d1c1b\js\ui.js
+  <input type="file" accept=".eext, .zip" multiple onChange=...>
+  await w.extensionApiMessageBus2.rpcCall("extensionApi.importExtensionPackages", {files:C, action:"import"})
+
+文件：D:\Program Files\lceda-pro\resources\app\assets\pro-api\0.2.29.aea7eadf\api.js
+  _.extensionApiMessageBus2.rpcService("extensionApi.importExtensionPackages", uT)
+  async function uT(e){
+    if(!nu()) return Ie.sys_Message.showToastMessage(Ie.sys_I18n.text("Please log in first"),"info"),!1;
+    ...
+  }
+  另有：loadedExtensionsIsAllowExternalInteractions:{eda:!0}（未确认是否即"外部交互"开关，未验证）
+
+============================================================
+[E14] 登录状态
+============================================================
+C:\Users\<user>\Documents\LCEDA-Pro\lceda-pro-activation.txt
+  username: ***REDACTED***
+  customer_code: ***REDACTED***
+（已登录）
+
+============================================================
+[E15] 工程文件与安全状态
+============================================================
+.eprj2 文件头前 16 字节： "SQLite format 3 "（复验 SQLite）
+
+git status --short
+   M "bord/桌面小摆件.eprj2"
+  ?? docs/desk-eink-info/ai-eda-experiment/
+
+会话第一条命令时 git status 为 "nothing to commit, working tree clean"。
+会话进行中 .eprj2 变为 M，大小 1744896 -> 1748992，mtime 2026-09-24 11:51:20。
+本会话未对 bord/ 做任何写操作，改动来自编辑器自身保存。
+
+bord 目录：
+  桌面小摆件.eprj2   1748992  2026/9/24 11:51:20
+  桌面小摆件_backup/          2026/5/29 13:14:07
+
+============================================================
+[E16] 运行中的 Bridge 进程
+============================================================
+Get-CimInstance Win32_Process -Filter "name='node.exe'"
+  PID 22840  "C:\Users\<user>\AppData\Local\Temp\opencode\node\node-v22.20.0-win-x64\node.exe" scripts/bridge-server.mjs
+（端口 49620，仅 127.0.0.1）
+停止命令：Stop-Process -Id 22840 -Force
+
+============================================================
+[E17] 解锁：EDA 窗口连上
+============================================================
+GET /health
+{"service":"easyeda-bridge","status":"ok","edaConnected":true,"edaWindowCount":1,"activeWindowId":"6731d52f-2c32-440a-931f-9cb8507c6134",...}
+GET /eda-windows
+{"windows":[{"windowId":"6731d52f-2c32-440a-931f-9cb8507c6134","connected":true,"active":true}],...}
+
+当前工程（getCurrentProjectInfo）：
+  friendlyName: test-AI-with-EDA
+  uuid: fd4d9cd485be2ff05c011a97b4013ecdd066798be02c58b95e18d0988ed6ab35
+  Board1 / Schematic1(P1: c685232f6ca7900a) / PCB1(bfc866825a4d6231)
+
+靶子初始：sha256=D76AE604CBFC4E9EDDE7265A314C12D5DC3C844DF7460CE2183402E5903D1EFF size=393216
+
+============================================================
+[E18] 第 1 撞：放置器件 -> 磁盘自动变（未调用 save）
+============================================================
+POST /execute  create(r[0],500,400,...)
+  {"success":true,"result":{"id":"b2f4081ec7a0e032","designator":"U?","x":500,"y":400,"componentType":"part"}}
+磁盘：sha256=F388FA80... size=430080 mtime=12:20:15.944（393216 -> 430080，未调 save）
+
+再放 10kΩ 0402（C25744）：
+  create -> {"id":"2d719c6057d30f49","designator":"R?","name":"={Value}","other":{"Value":"10kΩ",...}}
+
+============================================================
+[E19] 第 1 撞：modify 只改内存，不落盘
+============================================================
+before_modify sha256=04DACB7C9896E00B79FA779431B3C3EA9DD128B66DB0FAEA213A33F00C2662D1 mtime=12:21:01.977
+POST /execute  modify("2d719c6057d30f49", {otherProperty:{"Value":"22kΩ"}})
+  {"success":true,"result":{"modified":true,"other":{"Value":"22kΩ",...}}}
+等待 15 秒后再查磁盘：
+t0=04DACB7C... t15=04DACB7C... mtime=12:21:01.977（完全没变）
+
+============================================================
+[E20] 第 1 撞：sch_Document.save() 才落盘
+============================================================
+before_save=04DACB7C...
+POST /execute  eda.sch_Document.save()
+  {"success":true,"result":{"saved":true}}
+after_save=84BA6048AD92810A52A0D733002D8C11736D74D7225D5DCF085AA5E82FF0F1B0 mtime=12:21:40.668
+changed=True
+
+DMT_Project 全量方法：createProject / getAllProjectsUuid / getCurrentProjectInfo / getProjectInfo / moveProjectToFolder / openProject
+（没有工程级 save）
+
+============================================================
+[E21] 第 4 撞：加网络
+============================================================
+POST /execute  createNetFlag("Power","AI_TEST_NET",900,400,0,false)
+  {"success":true,"result":{"flagId":"9b34b60d554faf41","net":"AI_TEST_NET","saved":true}}
+磁盘：CCF352... -> ABD679BD... mtime=12:23:30.889
+
+============================================================
+[E22] 第 3 撞：importChanges + DRC 回读
+============================================================
+POST /execute
+  const imported = await eda.pcb_Document.importChanges();
+  const details = await eda.pcb_Drc.check(true,false,true);
+  const passed  = await eda.pcb_Drc.check(true,false,false);
+返回：
+  {"success":true,"result":{"imported":true,"detailCount":1,
+   "details":[{"name":"Netlist Error","count":1,"list":[{"name":"Netlist Error","ruleName":"Import Changes",
+     "obj1":{"typeName":"Schematic Netlist"},"obj2":{"typeName":"PCB Netlist"},
+     "explanation":{"str":"PCB and schematic netlist does not match. ..."}}]}],
+   "passed":false}}
+磁盘：84BA60... -> CCF352FEF7E530B123577E6D8BAE8B10546D28ABE2EB623DF3F9CA294F5F3456
+
+============================================================
+[E23] 第 2 撞（同窗口）：AI 未保存改动 + 用户手动拖动并保存
+============================================================
+AI：createNetFlag("Power","AI_CONC_FLAG",1000,500,...) 未保存，id=47a150a285b12503
+电阻初始 (700,400)，位号 R200
+用户：手动拖动电阻，Ctrl+S
+回读：
+  {"flagExists":true,"flagNet":"AI_CONC_FLAG","resistorX":970,"resistorY":735,"designator":"R200"}
+磁盘：A70D2298... -> A206347835EE747E8DC22AF1F75E1F15D8E3088A588D963AF66C38A64E7C9BC1 size=454656
+结论：同窗口 AI 与人不冲突，双方改动都保留。
+
+============================================================
+[E24] 第 2 撞（外部写文件）：被编辑器静默覆盖
+============================================================
+1. 备份：backup-test-AI-with-EDA_before-external-write.eprj2 sha256=0AE603FC... size=442368
+2. 外部用 node:sqlite 改 project_structures.structure：Board1 -> AI_EXTERNAL_BOARD
+   BEFORE id=1..4 len=752 hasBoard1=true
+   UPDATE changes: 4
+   AFTER  id=1..4 len=763 hasAIBoard=true
+   文件 sha：0AE603FC... -> 59584B3D3E1315685D7D82EC583062D577C63BD045D8D0ED9E4ECCB0E5901D58
+   磁盘检查：id=1..4 hasBoard1=false hasAIBoard=true
+3. API 回读：getCurrentProjectInfo().data[0].name = "Board1"（编辑器完全不知道文件被外部改了）
+4. 编辑器保存（modify + sch_Document.save() -> saved:true）
+5. 磁盘检查：id=1..5 hasBoard1=true hasAIBoard=false（外部改动被静默抹掉）
+   文件 sha：A70D229832E8DCD44ED598C1D0AA9981F645A6BEB05801DA04AD6E6F1653268F
+
+============================================================
+[E25] 其他原始报错
+============================================================
+searchByProperties（HALF_OFFLINE 被禁）：
+  POST /execute lib_Device.searchByProperties({supplierId:"C1523"},...)
+  HTTP 500
+  GBK 解码：{"success":false,"error":"错误：非全离线客户端环境无法调用本接口！"}
+
+modify 偶发内部错误：
+  HTTP 500 {"success":false,"error":"Cannot destructure property 'cmdKey' of 'i' as it is undefined."}
+  （触发后该次把 Value 清成空串 ""）
+
+中文编码：同一响应按 UTF-8 解码是替换符，按 GBK（codepage 936）解码才正确。
+
+undo/transaction/rollback/redo：在 references 全部 .md 里搜索，零命中。
+
+============================================================
+[E26] .eprj2 表结构（test-AI-with-EDA，编辑器 3.2.121）
+============================================================
+表：attributes backups block_symbol_attributes boards categories coppers notifications
+    project_logs project_members schematics sessions system_attributes team_members users
+    system_config db_paths db_versions resources texts editor_caches broadcast_messages
+    components_tmp documents component_histories branches branch_locks project_images
+    project_structures project_histories history_data components devices projects
+    project_history_a49e4791ecc949f0a28dbf98a9678b4a project_history_
+空表：components devices documents schematics coppers boards（均 0 行）
+非空：projects(1) project_structures(4) history_data(5) branches(2) project_members(1) users(1)
+project_structures.structure 是明文 JSON（boards/schematics/sheets/pcbs，含 version/updateTime 逻辑时钟）
+history_data.dataStr 是混淆/加密串（不是明文 JSON）

@@ -62,3 +62,8 @@ software/testdata/
 # ---------- Bad Apple 帧包（可由 tools/badapple/badapple.py 从视频重新生成）----------
 tools/badapple/out/
 *.baf
+
+# ---------- AI+EDA 实验里的官方文档与第三方产物（版权，不入库；本地保留）----------
+docs/desk-eink-info/ai-eda-experiment/_official-docs/
+docs/desk-eink-info/ai-eda-experiment/logs/
+docs/desk-eink-info/ai-eda-experiment/backup-*.eprj2
