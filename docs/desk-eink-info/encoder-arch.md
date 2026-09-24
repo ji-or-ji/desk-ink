@@ -16,12 +16,12 @@ flowchart LR
     end
 
     subgraph Resistor["分压网络（各方向串不同阻值到 GND）"]
-        RU["1.0kΩ"]
-        RD["2.2kΩ"]
-        RL["3.9kΩ"]
-        RR["6.8kΩ"]
-        RC["15kΩ"]
-        R0["R0 10kΩ → 3.3V
+        RU["1kΩ"]
+        RD["2.7kΩ"]
+        RL["5.6kΩ"]
+        RR["12kΩ"]
+        RC["22kΩ"]
+        R0["R0 100kΩ → 3.3V
 （上拉）"]
     end
 

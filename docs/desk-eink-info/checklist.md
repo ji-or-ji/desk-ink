@@ -155,7 +155,7 @@ USB-C 5V ──┬── BQ24073RGTR ──┬── XC6206P332MR ── 3.3V �
 | 中央 | 中央触点 | — | **22kΩ** → GND |
 
 - 一个 GPIO 读出五个动作：各方向串不同阻值，GPIO0 用 ADC1_CH0 读分压值查表
-- GPIO 0 需要外部 10kΩ 上拉到 3.3V。注意 ESP32-C3 的 strapping 脚是 **GPIO2 / GPIO8 / GPIO9**（下载模式由 GPIO9 决定），GPIO0 不在其中
+- GPIO 0 需要外部 100kΩ 上拉到 3.3V。注意 ESP32-C3 的 strapping 脚是 **GPIO2 / GPIO8 / GPIO9**（下载模式由 GPIO9 决定），GPIO0 不在其中
 - 深睡前配数字输入 + EXT1 唤醒；唤醒后切 ADC 读方向
 
 ---
