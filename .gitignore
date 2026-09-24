@@ -67,3 +67,7 @@ tools/badapple/out/
 docs/desk-eink-info/ai-eda-experiment/_official-docs/
 docs/desk-eink-info/ai-eda-experiment/logs/
 docs/desk-eink-info/ai-eda-experiment/backup-*.eprj2
+
+# ---------- AI+EDA 实验的靶子工程与编辑器缓存（本地保留，不入库）----------
+bord/test-AI-with-EDA.eprj2
+bord/0819f05c4eef4c71ace90d822a990e87
