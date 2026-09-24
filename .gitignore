@@ -47,6 +47,9 @@ __pycache__/
 software/build-qemu/
 software/sdkconfig.qemu
 software/sdkconfig.qemu.old
+software/build-qemu-badapple/
+software/sdkconfig.qemu.badapple
+software/sdkconfig.qemu.badapple.old
 
 # ---------- 厂商文档（第三方版权，不随仓库分发；需要请开 Issue）----------
 docs/*.pdf
@@ -55,3 +58,16 @@ docs/*.html
 # ---------- 第三方测试素材 ----------
 # 照片转出的 1-bit 裸数据（可由 tools/photo-to-1bit.ps1 从源图重新生成，不入库）
 software/testdata/
+
+# ---------- Bad Apple 帧包（可由 tools/badapple/badapple.py 从视频重新生成）----------
+tools/badapple/out/
+*.baf
+
+# ---------- AI+EDA 实验里的官方文档与第三方产物（版权，不入库；本地保留）----------
+docs/desk-eink-info/ai-eda-experiment/_official-docs/
+docs/desk-eink-info/ai-eda-experiment/logs/
+docs/desk-eink-info/ai-eda-experiment/backup-*.eprj2
+
+# ---------- AI+EDA 实验的靶子工程与编辑器缓存（本地保留，不入库）----------
+bord/test-AI-with-EDA.eprj2
+bord/0819f05c4eef4c71ace90d822a990e87

@@ -74,19 +74,19 @@
 
 > ⚠️ 原 SIQ-02FVS3 编码器已弃用，原理图需按下列新接法重画。
 
-- [ ] COM（公共端）→ GPIO 0（10kΩ 上拉到 3.3V）
-- [ ] 上 → 1.0kΩ → GND
-- [ ] 下 → 2.2kΩ → GND
-- [ ] 左 → 3.9kΩ → GND
-- [ ] 右 → 6.8kΩ → GND
-- [ ] 中央 → 15kΩ → GND
+- [ ] COM（公共端）→ GPIO 0（100kΩ 上拉到 3.3V）
+- [ ] 上 → 1kΩ → GND
+- [ ] 下 → 2.7kΩ → GND
+- [ ] 左 → 5.6kΩ → GND
+- [ ] 右 → 12kΩ → GND
+- [ ] 中央 → 22kΩ → GND
 
 ## ESP32-C3-WROOM-02-N4 模组
 
 - [x] 3V3 → 3.3V
 - [x] EN → 10kΩ → 3.3V + 0.1μF → GND
 - [x] GND 脚全部接地
-- [x] GPIO 0 确认外部 10kΩ 上拉
+- [x] GPIO 0 确认外部 100kΩ 上拉
 - [x] GPIO 1 → VG6328A PA9
 - [x] GPIO 2 → EINK RES#
 - [x] GPIO 3 → EINK D/C#
@@ -97,7 +97,7 @@
 - [x] GPIO 8 → EINK BUSY
 - [ ] GPIO 9 → （待定，用五向开关后释放）
 - [ ] GPIO 10 → （待定，用五向开关后释放）
-- [ ] GPIO 0 → 五向开关 COM（外部 10kΩ 上拉）
+- [ ] GPIO 0 → 五向开关 COM（外部 100kΩ 上拉）
 - [x] GPIO 18 → EINK SCL
 - [x] GPIO 19 → EINK SDA
 - [x] GPIO 20 → VG6328A TXD

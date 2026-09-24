@@ -1,0 +1,40 @@
+menu "Desk-ink Bad Apple demo"
+
+    config DEMO_BADAPP_BUNDLE_PATH
+        string "BAF1 bundle path on LittleFS"
+        default "/littlefs/badapple.baf"
+        depends on APP_DEMO_BADAPP
+        help
+            播放器从该路径读 BAF1 帧包。格式与生成方式见 tools/badapple/README.md。
+
+    config DEMO_BADAPP_LOOPS
+        int "Playback loops (0 = play once)"
+        default 0
+        range 0 1000
+        depends on APP_DEMO_BADAPP
+
+    config DEMO_MAX_FRAMES
+        int "Max frames to play (0 = all)"
+        default 0
+        depends on APP_DEMO_BADAPP
+        help
+            只播前 N 帧，QEMU 快速验证用。
+
+    config DEMO_EMBED_BUNDLE
+        bool "Embed testdata/badapple.baf and copy to LittleFS at boot"
+        default n
+        depends on APP_DEMO_BADAPP
+        help
+            没有 PC 推流链路时，把 tools/badapple 生成的帧包编进固件，
+            启动时写入 LittleFS，用于 QEMU 验证播放逻辑。
+
+    config DEMO_DUMP_EVERY
+        int "Dump every Nth frame as FB64 (0 = off)"
+        default 0
+        range 0 10000
+        depends on APP_DEMO_BADAPP
+        help
+            每 N 帧把 framebuffer 以 base64 打到串口，格式与 app/qemu_tour.c 一致，
+            主机 tools/fb64-decode.ps1 可还原成 PNG。
+
+endmenu

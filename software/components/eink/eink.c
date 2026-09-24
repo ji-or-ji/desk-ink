@@ -290,11 +290,93 @@ esp_err_t eink_flush_full(void)
     return wait_busy("refresh");
 }
 
+/*
+ * 局部刷新（SSD1619AZ）
+ *
+ * 几何与数据通路按 SSD1619AZ 的通用序列实现，窗口约定与 eink_flush_full 完全一致：
+ * 0x45 的 Y 是「起点 高 终点 高」四个字节，起点取面板坐标的 y1-1，终点取 y0，
+ * 因为本驱动的数据入口模式（0x11=0x01）下 Y 计数是递减的（整屏那套就是从 299 写到 0）。
+ *
+ * 波形参数 EINK_PARTIAL_UPDATE_PARAM 是占位值。仓库里没有规格书 LUT 表，
+ * 局部刷新到底用哪套波形（是否要先用 0x32 写独立 LUT、0x22 取哪个参数）
+ * 必须等硬件到位后实测确认。见 会话交接-BadApple.md 第二节。
+ */
+#ifndef EINK_PARTIAL_UPDATE_PARAM
+#define EINK_PARTIAL_UPDATE_PARAM 0xCF
+#endif
+
 esp_err_t eink_flush_partial(int x, int y, int w, int h)
 {
-    (void)x; (void)y; (void)w; (void)h;
-    /* 需要独立 LUT，留到整屏跑通之后 */
-    return ESP_ERR_NOT_SUPPORTED;
+    if (!s_ready) {
+        return ESP_ERR_NOT_SUPPORTED;
+    }
+    if (w <= 0 || h <= 0) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    /* 裁剪到屏幕内 */
+    if (x < 0) { w += x; x = 0; }
+    if (y < 0) { h += y; y = 0; }
+    if (x >= EINK_WIDTH || y >= EINK_HEIGHT) {
+        return ESP_ERR_INVALID_ARG;
+    }
+    if (x + w > EINK_WIDTH)  { w = EINK_WIDTH - x; }
+    if (y + h > EINK_HEIGHT) { h = EINK_HEIGHT - y; }
+
+    /* 面板 RAM 的 X 地址以字节（8 像素）为单位，窗口向外取整 */
+    int x0 = x & ~7;
+    int x1 = (x + w + 7) & ~7;
+    if (x1 > EINK_WIDTH) {
+        x1 = EINK_WIDTH;
+    }
+    int y0 = y;
+    int y1 = y + h;
+
+    int xs = x0 / 8;
+    int xe = x1 / 8 - 1;
+    int ys = EINK_HEIGHT - 1 - y0;   /* 面板 Y 起点（计数从这里递减） */
+    int ye = EINK_HEIGHT - 1 - (y1 - 1);
+
+    const uint8_t v44[] = { (uint8_t)xs, (uint8_t)xe };
+    const uint8_t v45[] = {
+        (uint8_t)(ys & 0xFF), (uint8_t)(ys >> 8),
+        (uint8_t)(ye & 0xFF), (uint8_t)(ye >> 8),
+    };
+    const uint8_t v4e[] = { (uint8_t)xs };
+    const uint8_t v4f[] = { (uint8_t)(ys & 0xFF), (uint8_t)(ys >> 8) };
+
+    cmd_data(0x44, v44, sizeof(v44));   /* RAM X 地址范围（字节） */
+    cmd_data(0x45, v45, sizeof(v45));   /* RAM Y 地址范围（像素，起点在下） */
+    cmd_data(0x4E, v4e, sizeof(v4e));   /* RAM X 计数 */
+    cmd_data(0x4F, v4f, sizeof(v4f));   /* RAM Y 计数 */
+
+    cmd(0x24);                          /* 写 BW RAM（取反） */
+
+    /* 只发这一块：每行从 x0/8 起 (x1-x0)/8 字节，逐字节取反 */
+    const int row_bytes = (x1 - x0) / 8;
+    gpio_set_level(PIN_DC, 1);
+    for (int row = y0; row < y1; row++) {
+        const uint8_t *src = &s_fb[row * EINK_FB_STRIDE + xs];
+        int remaining = row_bytes;
+        while (remaining > 0) {
+            int chunk = (remaining > DMA_CHUNK) ? DMA_CHUNK : remaining;
+            for (int i = 0; i < chunk; i++) {
+                s_dma[i] = (uint8_t)~src[i];
+            }
+            spi_transaction_t t = {
+                .length = chunk * 8,
+                .tx_buffer = s_dma,
+            };
+            ESP_ERROR_CHECK(spi_device_polling_transmit(s_spi, &t));
+            src += chunk;
+            remaining -= chunk;
+        }
+    }
+
+    const uint8_t v22[] = { EINK_PARTIAL_UPDATE_PARAM };
+    cmd_data(0x22, v22, sizeof(v22));   /* 图像更新（局部波形，参数待实测） */
+    cmd(0x20);                          /* 激活 */
+    return wait_busy("partial refresh");
 }
 
 esp_err_t eink_sleep(void)

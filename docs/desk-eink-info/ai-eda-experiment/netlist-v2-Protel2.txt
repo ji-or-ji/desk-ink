@@ -1,0 +1,3075 @@
+PROTEL NETLIST 2.0
+[
+DESIGNATOR
+FPC1
+FOOTPRINT
+FPC-SMD_24P-P0.50_FPC-05F-24PH20
+PARTTYPE
+FPC-05F-24PH20
+DESCRIPTION
+锁定特性:翻盖式;触点类型:卧贴;触点数量:24P;间距:0.5mm;安装方式:下接;工作温度:-25℃~+85℃;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+FPC-05F-24PH20
+Designator
+FPC1
+Device
+FPC-05F-24PH20
+Unique ID
+gge1
+Name
+FPC-05F-24PH20
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+翻盖式 卧贴 P数:24P 间距:0.5mm
+Supplier Part
+C2856805
+Manufacturer
+XUNPU(讯普)
+Manufacturer Part
+FPC-05F-24PH20
+Supplier Footprint
+SMD,P=0.5mm,卧贴
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/FPC-05F-24PH20/3056903.html
+Supplier
+LCSC
+3D Model Title
+FPC-SMD_24P-P0.50_FPC-05F-24PH20
+Locking Feature
+翻盖式
+Contact Type
+卧贴
+Number of Contacts
+24P
+Pitch
+0.5mm
+Mounting Type
+下接
+FFC, FCB Thickness
+0.3mm
+Height Above Board
+2mm
+Contact Material
+磷青铜
+Contact Plating
+锡
+Operating Temperature
+-25℃~+85℃
+Rated Voltage (Max)
+50V
+Current Rating (Max)
+500mA
+Description
+锁定特性:翻盖式;触点类型:卧贴;触点数量:24P;间距:0.5mm;安装方式:下接;工作温度:-25℃~+85℃;
+
+*
+]
+[
+DESIGNATOR
+C1
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C1
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge2
+Name
+1uF
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+1uF
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C2
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C2
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge3
+Name
+1uF
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+1uF
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C3
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C3
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge4
+Name
+1uF
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+1uF
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C4
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C4
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge5
+Name
+0.47uF
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+0.47uF
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C5
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C5
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge6
+Name
+1uF
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+1uF
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+U3
+FOOTPRINT
+QFN-16_L3.0-W3.0-P0.50-TL-EP1.7
+PARTTYPE
+BQ24073RGTR
+DESCRIPTION
+工作电压:4.35V~6.4V;最大充电电流:1.5A;电池类型:锂电池;电池节数:-;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+BQ24073RGTR
+Designator
+U3
+Device
+BQ24073RGTR
+Unique ID
+gge7
+Name
+BQ24073RGTR
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+1.5A USB友好型锂离子电池充电器和电源路径管理IC
+Supplier Part
+C15220
+Manufacturer
+TI(德州仪器)
+Manufacturer Part
+BQ24073RGTR
+Supplier Footprint
+QFN-16-EP(3x3)
+JLCPCB Part Class
+Extended Part
+Datasheet
+http://www.ti.com/cn/lit/gpn/bq24075
+Supplier
+LCSC
+3D Model Title
+QFN-16_L3.0-W3.0-P0.50-EP1.7
+The Chip Type
+充电芯片
+Voltage - Supply
+4.35V~6.4V
+Charge Current - Max
+1.5A
+Charging Saturation Voltage
+4.2V
+End-Off Voltage
+-
+Type of Battery
+锂电池
+Number of Cells
+-
+Operating Temperature
+-40℃~+125℃
+Battery Temperature Detection
+支持
+0V Battery Charge
+不支持
+Supply Current (Iq)
+50uA
+Balance Current
+-
+Interface
+-
+Features
+-
+Description
+工作电压:4.35V~6.4V;最大充电电流:1.5A;电池类型:锂电池;电池节数:-;
+
+*
+]
+[
+DESIGNATOR
+R1
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R1
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge8
+Name
+10K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+10K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+LED1
+FOOTPRINT
+LED0603-FD
+PARTTYPE
+GL0603UR01
+DESCRIPTION
+灯头类型:-;发光颜色:红色;正向压降(Vf):2.4V;功率:-;正向电流:20mA;波长:620nm~625nm;二极管配置:独立二极管;透镜颜色:无色透明透镜;色温:-;发光强度:120mcd;发光角度:120°;载带方式:正贴;工作温度:-40℃~+85℃;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+GL0603UR01
+Designator
+LED1
+Device
+GL0603UR01
+Unique ID
+gge10
+Name
+GL0603UR01
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+0603 红灯 高亮
+Supplier Part
+C51933292
+Manufacturer
+Guiguang light(桂光光电)
+Manufacturer Part
+GL0603UR01
+Supplier Footprint
+0603
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/GL0603UR01/54645988.html
+Supplier
+LCSC
+3D Model Title
+LED0603_Inf
+Lamp Holder Type
+-
+Illumination Color
+红色
+Voltage - Forward(Vf)
+2.4V
+Power(Watts)
+-
+Forward Current
+20mA
+Wavelength - Dominant
+620nm~625nm
+Peak Wavelength
+-
+Diode Configuration
+独立二极管
+Lens Color
+无色透明透镜
+Color Temperature
+-
+Luminous Intensity
+120mcd
+Viewing Angle
+120°
+Mounting Style
+正贴
+Operating Temperature
+-40℃~+85℃
+Description
+灯头类型:-;发光颜色:红色;正向压降(Vf):2.4V;功率:-;正向电流:20mA;波长:620nm~625nm;二极管配置:独立二极管;透镜颜色:无色透明透镜;色温:-;发光强度:120mcd;发光角度:120°;载带方式:正贴;工作温度:-40℃~+85℃;
+
+*
+]
+[
+DESIGNATOR
+R3
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R3
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge11
+Name
+10K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+10K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+USB1
+FOOTPRINT
+USB-TYPE-C-SMD_TYPE-C-16P-QTWT
+PARTTYPE
+TYPE-C 16P QTWT
+DESCRIPTION
+连接器类型:Type-C;协议标准:-;公母:母;安装方式:卧贴;触点数量:16P;端口数量:1;额定电流 - 电源:3A;工作温度:-25℃~+85℃;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+TYPE-C 16P QTWT
+Designator
+USB1
+Device
+TYPE-C 16P QTWT
+Unique ID
+gge12
+Name
+TYPE-C 16P QTWT
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+16P卧贴母座
+Supplier Part
+C5187472
+Manufacturer
+SHOU HAN(首韩)
+Manufacturer Part
+TYPE-C 16P QTWT
+Supplier Footprint
+SMD
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/TYPE-C%252016P%2520QTWT/5860367.html
+Supplier
+LCSC
+3D Model Title
+USB-TYPE-C-SMD_TYPE-C-16P-QTWT
+Connector Type
+Type-C
+Protocol Standard
+-
+Gender
+母
+Mounting Type
+卧贴
+Number of Contacts
+16P
+Number of Ports
+1
+Current Rating-Power
+3A
+Voltage Rating
+5V
+Connect-Disconnect Life
+5千次
+Supplementary Features
+-
+Center Height
+-
+Length
+-
+Detection color
+黑色
+Operating Temperature
+-25℃~+85℃
+Description
+连接器类型:Type-C;协议标准:-;公母:母;安装方式:卧贴;触点数量:16P;端口数量:1;额定电流 - 电源:3A;工作温度:-25℃~+85℃;
+
+*
+]
+[
+DESIGNATOR
+R4
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R4
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge13
+Name
+36K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+36K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C6
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C6
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge14
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+1uF
+Name
+1uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+C7
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C7
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge15
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+0.1uF
+Name
+0.1uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+R5
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R5
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge16
+Name
+2K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+2K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+U2
+FOOTPRINT
+SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR
+PARTTYPE
+MCP3021A5T-E/OT
+DESCRIPTION
+分辨率:10位;采样率:22.3kHz;工作电压:2.7V~5.5V;接口类型:I2C;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+MCP3021A5T-E/OT
+Designator
+U2
+Device
+MCP3021A5T-E/OT
+Unique ID
+gge17
+Name
+MCP3021A5T-E/OT
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+带有 I²C 接口的低功耗 10 位 A/D 转换器
+Supplier Part
+C128576
+Manufacturer
+MICROCHIP(美国微芯)
+Manufacturer Part
+MCP3021A5T-E/OT
+Supplier Footprint
+SOT-23-5
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/MCP3021A5T-E%252FOT/139861.html
+Supplier
+LCSC
+3D Model Title
+SOT-23-5_L2.9-W1.6-H1.1-LS2.8-P0.95
+Resolution(Bits)
+10位
+Sampling Rate
+22.3kHz
+number of channels
+1
+Voltage - Supply
+2.7V~5.5V
+Interface
+I2C
+differential input
+否
+Integral non - linearity
+1LSB
+Operating Temperature
+-40℃~+125℃
+Clock/Oscillator
+内置
+Voltage Reference
+内置
+ADC architecture
+SAR
+Quiescent Current (Iq)
+5nA
+Description
+分辨率:10位;采样率:22.3kHz;工作电压:2.7V~5.5V;接口类型:I2C;
+
+*
+]
+[
+DESIGNATOR
+U1
+FOOTPRINT
+BULETM-SMD_ESPRESSIF_ESP32-C3-WROOM-02-N4-4MB
+PARTTYPE
+ESP32-C3-WROOM-02-N4
+DESCRIPTION
+核心芯片:ESP32-C3芯片;频率:2.4GHz;天线形式:板载PCB天线;发射功率:20.5dBm;接收灵敏度:-105dBm;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+ESP32-C3-WROOM-02-N4(4MB)
+Designator
+U1
+Device
+ESP32-C3-WROOM-02-N4
+Unique ID
+gge18
+Name
+2.4GHz
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+不带固件 2.4GHz Wi-Fi（802.11b/g/n）+ 蓝牙5模组
+Supplier Part
+C2934560
+Manufacturer
+ESPRESSIF(乐鑫)
+Manufacturer Part
+ESP32-C3-WROOM-02-N4
+Supplier Footprint
+VFQFN-32-EP
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/ESP32-C3-WROOM-02-N4/3281215.html
+Supplier
+LCSC
+3D Model Title
+BULETM-SMD_ESPRESSIF_ESP32-C3-WROOM-02-N4-4MB
+Utilized IC / Part
+ESP32-C3芯片
+Wireless Standard
+Bluetooth5.0
+Interface Type
+I2S；I2C；JTAG；UART；USB；SPI
+Value
+2.4GHz
+Antenna Type
+板载PCB天线
+Output Power
+20.5dBm
+Voltage - Supply
+3V~3.6V
+Receive  Current
+82mA
+Send  Current
+345mA
+Sensitivity
+-105dBm
+Operating Temperature
+-40℃~+85℃
+Description
+核心芯片:ESP32-C3芯片;频率:2.4GHz;天线形式:板载PCB天线;发射功率:20.5dBm;接收灵敏度:-105dBm;
+
+*
+]
+[
+DESIGNATOR
+R6
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R6
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge19
+Name
+10K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+10K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+R7
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R7
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge20
+Name
+10K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+10K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+U4
+FOOTPRINT
+SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL
+PARTTYPE
+DS3231MZ+TRL
+DESCRIPTION
+接口类型:I2C;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+DS3231MZ+
+Designator
+U4
+Device
+DS3231MZ+TRL
+Unique ID
+gge21
+Name
+DS3231MZ+TRL
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+高精度RTC集成MEMS谐振器
+Supplier Part
+C107410
+Manufacturer
+ADI(亚德诺)/MAXIM(美信)
+Manufacturer Part
+DS3231MZ+TRL
+Supplier Footprint
+SOIC-8
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/DS3231MZ%252BTRL/108629.html
+Supplier
+LCSC
+3D Model Title
+SOIC-8_L4.9-W3.9-H1.7-LS6.0-P1.27
+Interface
+I2C
+Voltage - Supply
+2.3V~5.5V
+Operating Temperature
+-40℃~+85℃
+Description
+接口类型:I2C;
+
+*
+]
+[
+DESIGNATOR
+C8
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C8
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge22
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+10uF
+Name
+10uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+C9
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C9
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge23
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+1uF
+Name
+1uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+C10
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C10
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge24
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+4.7uF
+Name
+4.7uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+U5
+FOOTPRINT
+SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR
+PARTTYPE
+XC6206P332MR_C5148692
+DESCRIPTION
+输出类型:固定;工作电压:8V;输出电压:3.3V;输出电流:300mA;输出极性:正极;
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+XC6206P332MR_C5148692
+Designator
+U5
+Device
+XC6206P332MR_C5148692
+Unique ID
+gge25
+Name
+XC6206P332MR
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+输入8V 输出3.3V 300mA
+Supplier Part
+C5148692
+Manufacturer
+HXY MOSFET(华轩阳电子)
+Manufacturer Part
+XC6206P332MR
+Supplier Footprint
+SOT-23
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://atta.szlcsc.com/upload/public/pdf/source/20230315/7D5B35EFFBBF81C2EFC36318D2A1A670.pdf
+Supplier
+LCSC
+3D Model Title
+SOT-23-3P_L2.9-W1.3-H1.0-LS2.4-P0.95
+Output Type
+固定
+Voltage - Supply
+8V
+Output Voltage
+3.3V
+Output Current
+300mA
+Voltage Dropout
+240mV@(50mA)
+Features
+过流保护(OCP)
+Output Configuration
+正极
+Number of Outputs
+1
+Description
+输出类型:固定;工作电压:8V;输出电压:3.3V;输出电流:300mA;输出极性:正极;
+
+*
+]
+[
+DESIGNATOR
+C11
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C11
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge26
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+1uF
+Name
+1uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+R2
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R2
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge27
+Name
+5.1K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+5.1K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+R8
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R8
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge28
+Name
+5.1K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+5.1K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C12
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C12
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge26_0
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+1uF
+Name
+1uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+BGND
+FOOTPRINT
+Test-Point-0.5mm
+PARTTYPE
+Test-Point
+DESCRIPTION
+Test Point 测试点
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+BGND
+Symbol
+Test-Point
+Device
+Test-Point
+Unique ID
+gge29
+Name
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+3D Model Title
+
+Description
+Test Point 测试点
+
+*
+]
+[
+DESIGNATOR
+BAT+
+FOOTPRINT
+Test-Point-0.5mm
+PARTTYPE
+Test-Point
+DESCRIPTION
+Test Point 测试点
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+BAT+
+Symbol
+Test-Point
+Device
+Test-Point
+Unique ID
+gge30
+Name
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+3D Model Title
+
+Description
+Test Point 测试点
+
+*
+]
+[
+DESIGNATOR
+R9
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R9
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge31
+Name
+100K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+100K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+R10
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R10
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge32
+Name
+100K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+100K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C13
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C13
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge33
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+1uF
+Name
+1uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+C14
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C14
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge4_0
+Name
+1uF
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+1uF
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+R11
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R11
+Symbol
+电阻
+Device
+Res_0603
+Name
+10K
+Unique ID
+gge19_0
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+10K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+C15
+FOOTPRINT
+C0603
+PARTTYPE
+CAP_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C15
+Symbol
+Capacitance
+Device
+CAP_0603
+Unique ID
+gge34
+Supplier Footprint
+0603
+3D Model Title
+C0603_L1.6-W0.8-H0.8
+Value
+0.1uF
+Name
+0.1uF
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+R12
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R12
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge35
+Name
+100K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+100K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+R13
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R13
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge37
+Name
+10K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+10K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+R14
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R14
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge38
+Name
+10K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+10K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+U7
+FOOTPRINT
+COMM-SMD_L14.5-W11.5_VG6328A-PRO
+PARTTYPE
+VG6328A-Pro
+DESCRIPTION
+基本规格
+➢ 小体积：14.5 ×11.5 ×2.6mm
+➢ PCB 板载天线
+➢ 蓝牙协议版本：BLE 5.3
+➢ 支持传统蓝牙 SPP 功能
+➢ 支持 BLE 从机模式
+➢ 透传服务 UUID 可自定义
+➢ 串口默认参数：波特率(115200 baud)，8 个数据位，1 个停止位，无奇偶校验位
+➢ 支持 16 位和 128 位 uuid 透传服务
+➢ 支持 AT 模式：用户可以通过串口 AT 指令，对模块支持的参数进行修改
+➢ 支持透传模式：用户可以通过模块的串口，与移动设备进行双向通讯；移动设备可
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Symbol
+VG6328A-PRO
+Designator
+U7
+Device
+VG6328A-Pro
+Unique ID
+gge41
+Name
+VG6328A-Pro
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+低功耗AC6328A从机串口透传蓝牙SPP+BLE双模蓝牙模组
+Supplier Part
+C53263476
+Manufacturer
+Vollgo(沃进)
+Manufacturer Part
+VG6328A-Pro
+Supplier Footprint
+SMD14.5x11.5mm
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/VG6328A-Pro/56324196.html
+Supplier
+LCSC
+Description
+基本规格
+➢ 小体积：14.5 ×11.5 ×2.6mm
+➢ PCB 板载天线
+➢ 蓝牙协议版本：BLE 5.3
+➢ 支持传统蓝牙 SPP 功能
+➢ 支持 BLE 从机模式
+➢ 透传服务 UUID 可自定义
+➢ 串口默认参数：波特率(115200 baud)，8 个数据位，1 个停止位，无奇偶校验位
+➢ 支持 16 位和 128 位 uuid 透传服务
+➢ 支持 AT 模式：用户可以通过串口 AT 指令，对模块支持的参数进行修改
+➢ 支持透传模式：用户可以通过模块的串口，与移动设备进行双向通讯；移动设备可
+
+*
+]
+[
+DESIGNATOR
+R15
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R15
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge42
+Name
+27K
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Value
+27K
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+R16
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R16
+Symbol
+电阻
+Device
+Res_0603
+Value
+27K
+Name
+27K
+Unique ID
+gge43
+Reuse Block
+
+Group ID
+
+Channel ID
+
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+
+*
+]
+[
+DESIGNATOR
+U8
+FOOTPRINT
+SW-SMD_WS-1002-ACW05026
+PARTTYPE
+WS-1002-ACW05026
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Name
+WS-1002-ACW05026
+Designator
+U8
+Symbol
+WS-1002-ACW05026
+Device
+WS-1002-ACW05026
+Unique ID
+gge44
+Reuse Block
+
+Group ID
+
+Channel ID
+
+LCSC Part Name
+7*7贴片五向开关 多功能多向摇杆开关 7.5x7.5x5小型五向轻触开关
+Supplier Part
+C42377834
+Manufacturer
+XUNPU(讯普)
+Manufacturer Part
+WS-1002-ACW05026
+Supplier Footprint
+SMD-8P,7.5x7.5mm
+JLCPCB Part Class
+Extended Part
+Datasheet
+https://item.szlcsc.com/datasheet/WS-1002-ACW05026/44278001.html
+Supplier
+LCSC
+3D Model Title
+SW-SMD_WS-1002-ACW05026
+Switch Type
+-
+Mounting Type
+立贴
+Contact Current
+100mA
+Voltage Rating
+12V
+Operating Temperature
+-30℃~+85℃
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R17
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R17
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge45
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+22K
+Name
+22K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+R18
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R18
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge46
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+1K
+Name
+1K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+R19
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R19
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge47
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+5.6K
+Name
+5.6K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+R20
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R20
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge48
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+2.7K
+Name
+2.7K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+[
+DESIGNATOR
+R22
+FOOTPRINT
+R0603
+PARTTYPE
+Res_0603
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R22
+Symbol
+电阻
+Device
+Res_0603
+Unique ID
+gge49
+Supplier Footprint
+0603
+3D Model Title
+R0603
+Value
+12K
+Name
+12K
+Description
+
+Sim Model
+
+Sim Model Title
+
+Sim Model Path
+
+NGSpice Model
+
+NGSpice Model Title
+
+NGspice Model Path
+
+Reuse Block
+
+Group ID
+
+Channel ID
+
+
+*
+]
+(
+GDR 
+FPC1-2 FPC-05F-24PH20-2 Passive 
+)
+(
+RESE 
+FPC1-3 FPC-05F-24PH20-3 Passive 
+)
+(
+VSH2 
+FPC1-5 FPC-05F-24PH20-5 Passive 
+C5-1 CAP_0603-1 Input   
+)
+(
+TSCL 
+FPC1-6 FPC-05F-24PH20-6 Passive 
+)
+(
+TSDA 
+FPC1-7 FPC-05F-24PH20-7 Passive 
+)
+(
+3V3 
+FPC1-8 FPC-05F-24PH20-8 Passive 
+FPC1-15 FPC-05F-24PH20-15 Passive 
+FPC1-16 FPC-05F-24PH20-16 Passive 
+U3-6 BQ24073RGTR-EN1 Passive 
+U1-1 ESP32-C3-WROOM-02-N4-3V3 Passive 
+R6-1 Res_0603-1 Input   
+R7-1 Res_0603-1 Input   
+U4-2 DS3231MZ+TRL-VCC Passive 
+U5-2 XC6206P332MR_C5148692-VOUT Passive 
+C12-2 CAP_0603-2 Input   
+R11-1 Res_0603-1 Input   
+R12-2 Res_0603-2 Input   
+R13-1 Res_0603-1 Input   
+R14-2 Res_0603-2 Input   
+U7-4 VG6328A-Pro-VDD Passive 
+)
+(
+BUSY 
+FPC1-9 FPC-05F-24PH20-9 Passive 
+U1-7 ESP32-C3-WROOM-02-N4-IO8 Passive 
+)
+(
+GPIO2 
+FPC1-10 FPC-05F-24PH20-10 Passive 
+U1-16 ESP32-C3-WROOM-02-N4-IO2 Passive 
+)
+(
+D/C# 
+FPC1-11 FPC-05F-24PH20-11 Passive 
+U1-15 ESP32-C3-WROOM-02-N4-IO3 Passive 
+)
+(
+CS# 
+FPC1-12 FPC-05F-24PH20-12 Passive 
+U1-3 ESP32-C3-WROOM-02-N4-IO4 Passive 
+)
+(
+GPIO18 
+FPC1-13 FPC-05F-24PH20-13 Passive 
+U2-5 MCP3021A5T-E/OT-SCL Passive 
+U1-13 ESP32-C3-WROOM-02-N4-IO18 Passive 
+U1-5 ESP32-C3-WROOM-02-N4-IO6 Passive 
+R7-2 Res_0603-2 Input   
+U4-8 DS3231MZ+TRL-SCL Passive 
+R16-2 Res_0603-2 Input   
+)
+(
+GPIO19 
+FPC1-14 FPC-05F-24PH20-14 Passive 
+U2-4 MCP3021A5T-E/OT-SDA Passive 
+U1-14 ESP32-C3-WROOM-02-N4-IO19 Passive 
+U1-4 ESP32-C3-WROOM-02-N4-IO5 Passive 
+R6-2 Res_0603-2 Input   
+U4-7 DS3231MZ+TRL-SDA Passive 
+R15-2 Res_0603-2 Input   
+)
+(
+GND 
+FPC1-17 FPC-05F-24PH20-17 Passive 
+FPC1-25 FPC-05F-24PH20-25 Passive 
+FPC1-26 FPC-05F-24PH20-26 Passive 
+C1-2 CAP_0603-2 Input   
+C2-2 CAP_0603-2 Input   
+C3-2 CAP_0603-2 Input   
+C4-2 CAP_0603-2 Input   
+C5-2 CAP_0603-2 Input   
+U3-4 BQ24073RGTR-CE# Passive 
+U3-5 BQ24073RGTR-EN2 Passive 
+U3-8 BQ24073RGTR-VSS Passive 
+U3-12 BQ24073RGTR-ILIM Passive 
+U3-15 BQ24073RGTR-TD Passive 
+U3-17 BQ24073RGTR-EP Passive 
+R1-2 Res_0603-2 Input   
+R3-1 Res_0603-1 Input   
+USB1-A1 TYPE-C 16P QTWT-GND Passive 
+USB1-A12 TYPE-C 16P QTWT-GND Passive 
+R4-1 Res_0603-1 Input   
+C7-1 CAP_0603-1 Input   
+R5-1 Res_0603-1 Input   
+U2-2 MCP3021A5T-E/OT-VSS Passive 
+U1-19 ESP32-C3-WROOM-02-N4-EP Passive 
+U1-9 ESP32-C3-WROOM-02-N4-GND Passive 
+U4-5 DS3231MZ+TRL-GND Passive 
+C8-1 CAP_0603-1 Input   
+C9-1 CAP_0603-1 Input   
+C10-1 CAP_0603-1 Input   
+U5-1 XC6206P332MR_C5148692-VSS Passive 
+C11-1 CAP_0603-1 Input   
+R2-2 Res_0603-2 Input   
+R8-2 Res_0603-2 Input   
+C12-1 CAP_0603-1 Input   
+BGND-1 Test-Point-1 Input   
+R10-2 Res_0603-2 Input   
+C13-2 CAP_0603-2 Input   
+C14-2 CAP_0603-2 Input   
+C15-2 CAP_0603-2 Input   
+U7-3 VG6328A-Pro-GND Passive 
+U8-7 WS-1002-ACW05026-7 Passive 
+U8-8 WS-1002-ACW05026-8 Passive 
+R17-1 Res_0603-1 Input   
+R18-1 Res_0603-1 Input   
+R19-1 Res_0603-1 Input   
+R20-2 Res_0603-2 Input   
+R22-2 Res_0603-2 Input   
+)
+(
+$1N23 
+FPC1-18 FPC-05F-24PH20-18 Passive 
+C1-1 CAP_0603-1 Input   
+)
+(
+VSH1 
+FPC1-20 FPC-05F-24PH20-20 Passive 
+C2-1 CAP_0603-1 Input   
+)
+(
+VGH 
+FPC1-21 FPC-05F-24PH20-21 Passive 
+C13-1 CAP_0603-1 Input   
+)
+(
+VSL 
+FPC1-22 FPC-05F-24PH20-22 Passive 
+C3-1 CAP_0603-1 Input   
+)
+(
+VGL 
+FPC1-23 FPC-05F-24PH20-23 Passive 
+C14-1 CAP_0603-1 Input   
+)
+(
+VCOM 
+FPC1-24 FPC-05F-24PH20-24 Passive 
+C4-1 CAP_0603-1 Input   
+)
+(
+$1N149 
+U3-1 BQ24073RGTR-TS Passive 
+R1-1 Res_0603-1 Input   
+)
+(
+P+ 
+U3-2 BQ24073RGTR-BAT Passive 
+U3-3 BQ24073RGTR-BAT Passive 
+C9-2 CAP_0603-2 Input   
+BAT+-1 Test-Point-1 Input   
+R9-1 Res_0603-1 Input   
+)
+(
+$1N157 
+U3-9 BQ24073RGTR-CHG# Passive 
+LED1-2 GL0603UR01-C Passive 
+)
+(
+3.0V-4.2V 
+U3-10 BQ24073RGTR-OUT Passive 
+U3-11 BQ24073RGTR-OUT Passive 
+C10-2 CAP_0603-2 Input   
+U5-3 XC6206P332MR_C5148692-VIN Passive 
+C11-2 CAP_0603-2 Input   
+)
+(
+$1N171 
+U3-13 BQ24073RGTR-IN Passive 
+C6-2 CAP_0603-2 Input   
+)
+(
+$1N170 
+U3-14 BQ24073RGTR-TMR Passive 
+R4-2 Res_0603-2 Input   
+)
+(
+$1N174 
+U3-16 BQ24073RGTR-ISET Passive 
+R5-2 Res_0603-2 Input   
+)
+(
+$1N158 
+LED1-1 GL0603UR01-A Passive 
+R3-2 Res_0603-2 Input   
+)
+(
+VBUS+ 
+USB1-A4 TYPE-C 16P QTWT-VBUS Passive 
+USB1-A9 TYPE-C 16P QTWT-VBUS Passive 
+C6-1 CAP_0603-1 Input   
+C7-2 CAP_0603-2 Input   
+U2-1 MCP3021A5T-E/OT-VDD Passive 
+)
+(
+$1N201 
+USB1-B5 TYPE-C 16P QTWT-CC2 Passive 
+R2-1 Res_0603-1 Input   
+)
+(
+$1N249 
+USB1-A7 TYPE-C 16P QTWT-DN1 Passive 
+R16-1 Res_0603-1 Input   
+)
+(
+$1N248 
+USB1-A6 TYPE-C 16P QTWT-DP1 Passive 
+R15-1 Res_0603-1 Input   
+)
+(
+$1N202 
+USB1-A5 TYPE-C 16P QTWT-CC1 Passive 
+R8-1 Res_0603-1 Input   
+)
+(
+$1N210 
+U2-3 MCP3021A5T-E/OT-AIN Passive 
+R9-2 Res_0603-2 Input   
+R10-1 Res_0603-1 Input   
+)
+(
+GPIO0 
+U1-18 ESP32-C3-WROOM-02-N4-IO0 Passive 
+R12-1 Res_0603-1 Input   
+U8-5 WS-1002-ACW05026-5 Passive 
+)
+(
+GPIO1 
+U1-17 ESP32-C3-WROOM-02-N4-IO1 Passive 
+U7-5 VG6328A-Pro-PA9 Passive 
+)
+(
+GPIO21 
+U1-12 ESP32-C3-WROOM-02-N4-TXD Passive 
+U7-1 VG6328A-Pro-RXD Passive 
+)
+(
+GPIO20 
+U1-11 ESP32-C3-WROOM-02-N4-RXD Passive 
+U7-2 VG6328A-Pro-TXD Passive 
+)
+(
+GPIO10 
+U1-10 ESP32-C3-WROOM-02-N4-IO10 Passive 
+R14-1 Res_0603-1 Input   
+)
+(
+GPIO9 
+U1-8 ESP32-C3-WROOM-02-N4-IO9 Passive 
+R13-2 Res_0603-2 Input   
+)
+(
+GPIO7 
+U1-6 ESP32-C3-WROOM-02-N4-IO7 Passive 
+U4-3 DS3231MZ+TRL-INT#/SQW Passive 
+)
+(
+$1N218 
+U1-2 ESP32-C3-WROOM-02-N4-EN Passive 
+R11-2 Res_0603-2 Input   
+C15-1 CAP_0603-1 Input   
+)
+(
+$1N187 
+U4-6 DS3231MZ+TRL-VBAT Passive 
+C8-2 CAP_0603-2 Input   
+)
+(
+$1N253 
+U8-1 WS-1002-ACW05026-1 Passive 
+R18-2 Res_0603-2 Input   
+)
+(
+$1N252 
+U8-2 WS-1002-ACW05026-2 Passive 
+R17-2 Res_0603-2 Input   
+)
+(
+$1N254 
+U8-3 WS-1002-ACW05026-3 Passive 
+R19-2 Res_0603-2 Input   
+)
+(
+$1N257 
+U8-4 WS-1002-ACW05026-4 Passive 
+R22-1 Res_0603-1 Input   
+)
+(
+$1N255 
+U8-6 WS-1002-ACW05026-6 Passive 
+R20-1 Res_0603-1 Input   
+)
