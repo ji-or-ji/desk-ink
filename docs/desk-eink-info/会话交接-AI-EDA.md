@@ -163,6 +163,6 @@ Run API Gateway 扩展
 
 ## 八、一条提醒
 
-用户手上还有另外两个 opencode 窗口在跑（硬件/固件、Bad Apple demo），它们**共用同一个工作区**。
+用户手上还有另外几个 opencode 窗口在跑（硬件/固件、Bad Apple demo、bord 审查），它们**共用同一个工作区**。
 
 所以：**你的产物只放在自己的目录里**，别去动 `software/` 和 `tools/badapple/`。这样助理审阅时能一眼分清哪些改动是谁做的。
