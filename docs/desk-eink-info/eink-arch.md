@@ -24,8 +24,8 @@ SPI数据"]
 Pin 16 VCI
 → 3.3V"]
         VDD["Pin 18 VDD
-核心电源
-→ 3.3V + 电容对VSS"]
+核心电源（内部稳压输出）
+→ 只挂电容到VSS，不接电源"]
         GND_PIN["Pin 17 VSS
 → GND"]
         VPP["Pin 19 VPP
@@ -62,8 +62,8 @@ SPI MOSI"]
     end
 
     subgraph Mode["接口模式"]
-        BS1_HIGH["BS1 = 高电平 → 4线SPI
-(直连VDDIO)"]
+        BS1_LOW["BS1 = 低电平 → 4线SPI
+(接GND；高电平是3线SPI)"]
     end
 
     EINK_BUSY <--> BUSY
@@ -76,14 +76,12 @@ SPI MOSI"]
     SPI_PERIPH --> EINK_SDA
     SPI_PERIPH --> EINK_CS
     VCC33 --> PWR
-    VCC33 --> VDD
-    VCC33 --> BS1
-    BS1 --> BS1_HIGH
+    BS1 --> BS1_LOW
     GND_PIN --> GND_PIN
 
     style EINK fill:#4a90d9,color:#fff
     style ESP32 fill:#3a7bd5,color:#fff
-    style BS1_HIGH fill:#e6b422,color:#333
+    style BS1_LOW fill:#e6b422,color:#333
 ```
 
 ## 引脚连接汇总
@@ -91,13 +89,13 @@ SPI MOSI"]
 | FPC Pin | 名称 | 类型 | 功能 | → ESP32 / 电源 |
 |:-------:|:----:|:----:|------|---------------|
 | 1 | NC | — | 悬空 | — |
-| 2 | GDR | O | 栅极驱动控制 | 悬空（内部） |
-| 3 | RESE | I | 电流检测输入 | 悬空（内部） |
+| 2 | GDR | O | 栅极驱动控制 | **接外挂升压的 MOSFET 栅极** |
+| 3 | RESE | I | 电流检测输入 | **经 2.2Ω 到 GND** |
 | 4 | NC | — | 悬空 | — |
 | 5 | VSH2 | C | 源驱动正压 | 1μF/25V → GND |
 | 6 | TSCL | O | 温度传感器 I2C 时钟 | 悬空 |
 | 7 | TSDA | I/O | 温度传感器 I2C 数据 | 悬空 |
-| 8 | BS1 | I | 接口模式选择 | **3.3V**（= 4 线 SPI） |
+| 8 | BS1 | I | 接口模式选择 | **接 GND**（低电平 = 4 线 SPI） |
 | 9 | BUSY | O | 忙状态输出 | **GPIO 8**（输入） |
 | 10 | RES# | I | 复位（低有效） | **GPIO 2**（输出） |
 | 11 | D/C# | I | 数据/命令控制 | **GPIO 3**（输出） |
@@ -107,7 +105,7 @@ SPI MOSI"]
 | 15 | VDDIO | P | 接口逻辑电源 | 3.3V（应与 VCI 同电位） |
 | 16 | VCI | P | 芯片主电源 | 3.3V |
 | 17 | VSS | P | 地 | GND |
-| 18 | VDD | C | 核心逻辑电源 | **3.3V + 1μF/25V → GND** |
+| 18 | VDD | C | 核心逻辑电源（内部稳压输出） | **只挂 1μF/25V → GND，不接电源** |
 | 19 | VPP | P | 测试脚 | 悬空 |
 | 20 | VSH1 | C | 源驱动正压 | 1μF/25V → GND |
 | 21 | VGH | C | 栅极驱动正压 | 1μF/25V → GND |
