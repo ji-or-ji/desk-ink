@@ -1,0 +1,192 @@
+===== COMPONENTS =====
+FPC1	FPC-05F-24PH20        	FPC-05F-24PH20	FPC-SMD_24P-P0.50_FPC-05F-24PH20
+C1	CAP_0603              	1uF           	C0603
+C2	CAP_0603              	1uF           	C0603
+C3	CAP_0603              	1uF           	C0603
+C4	CAP_0603              	0.47uF        	C0603
+C5	CAP_0603              	1uF           	C0603
+U3	BQ24073RGTR           	BQ24073RGTR   	QFN-16_L3.0-W3.0-P0.50-TL-EP1.7
+R1	Res_0603              	10K           	R0603
+LED1	GL0603UR01            	GL0603UR01    	LED0603-FD
+R3	Res_0603              	10K           	R0603
+USB1	TYPE-C 16P QTWT       	TYPE-C 16P QTWT	USB-TYPE-C-SMD_TYPE-C-16P-QTWT
+R4	Res_0603              	36K           	R0603
+C6	CAP_0603              	1uF           	C0603
+C7	CAP_0603              	0.1uF         	C0603
+R5	Res_0603              	2K            	R0603
+U2	MCP3021A5T-E/OT       	MCP3021A5T-E/OT	SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR
+U1	ESP32-C3-WROOM-02-N4  	2.4GHz        	BULETM-SMD_ESPRESSIF_ESP32-C3-WROOM-02-N4-4MB
+R6	Res_0603              	10K           	R0603
+R7	Res_0603              	10K           	R0603
+U4	DS3231MZ+TRL          	DS3231MZ+TRL  	SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL
+C8	CAP_0603              	10uF          	C0603
+C9	CAP_0603              	1uF           	C0603
+C10	CAP_0603              	4.7uF         	C0603
+U5	XC6206P332MR_C5148692 	XC6206P332MR  	SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR
+C11	CAP_0603              	1uF           	C0603
+R2	Res_0603              	5.1K          	R0603
+R8	Res_0603              	5.1K          	R0603
+C12	CAP_0603              	1uF           	C0603
+BGND	Test-Point            	              	Test-Point-0.5mm
+BAT+	Test-Point            	              	Test-Point-0.5mm
+R9	Res_0603              	100K          	R0603
+R10	Res_0603              	100K          	R0603
+C13	CAP_0603              	1uF           	C0603
+C14	CAP_0603              	1uF           	C0603
+R11	Res_0603              	10K           	R0603
+C15	CAP_0603              	0.1uF         	C0603
+R12	Res_0603              	100K          	R0603
+R13	Res_0603              	10K           	R0603
+R14	Res_0603              	10K           	R0603
+U7	VG6328A-Pro           	VG6328A-Pro   	COMM-SMD_L14.5-W11.5_VG6328A-PRO
+R15	Res_0603              	27K           	R0603
+R16	Res_0603              	27K           	R0603
+U8	WS-1002-ACW05026      	WS-1002-ACW05026	SW-SMD_WS-1002-ACW05026
+R17	Res_0603              	22K           	R0603
+R18	Res_0603              	1K            	R0603
+R19	Res_0603              	5.6K          	R0603
+R20	Res_0603              	2.7K          	R0603
+R22	Res_0603              	12K           	R0603
+
+===== NETS =====
+
+[$1N149] (2)
+  R1-1  U3-1
+
+[$1N157] (2)
+  LED1-2  U3-9
+
+[$1N158] (2)
+  LED1-1  R3-2
+
+[$1N170] (2)
+  R4-2  U3-14
+
+[$1N171] (2)
+  C6-2  U3-13
+
+[$1N174] (2)
+  R5-2  U3-16
+
+[$1N187] (2)
+  C8-2  U4-6
+
+[$1N201] (2)
+  R2-1  USB1-B5
+
+[$1N202] (2)
+  R8-1  USB1-A5
+
+[$1N210] (3)
+  R10-1  R9-2  U2-3
+
+[$1N218] (3)
+  C15-1  R11-2  U1-2
+
+[$1N23] (2)
+  C1-1  FPC1-18
+
+[$1N248] (2)
+  R15-1  USB1-A6
+
+[$1N249] (2)
+  R16-1  USB1-A7
+
+[$1N252] (2)
+  R17-2  U8-2
+
+[$1N253] (2)
+  R18-2  U8-1
+
+[$1N254] (2)
+  R19-2  U8-3
+
+[$1N255] (2)
+  R20-1  U8-6
+
+[$1N257] (2)
+  R22-1  U8-4
+
+[3.0V-4.2V] (5)
+  C10-2  C11-2  U3-10  U3-11  U5-3
+
+[3V3] (15)
+  C12-2  FPC1-15  FPC1-16  FPC1-8  R11-1  R12-2  R13-1  R14-2  R6-1  R7-1  U1-1  U3-6  U4-2  U5-2  U7-4
+
+[BUSY] (2)
+  FPC1-9  U1-7
+
+[CS#] (2)
+  FPC1-12  U1-3
+
+[D/C#] (2)
+  FPC1-11  U1-15
+
+[GDR] (1)
+  FPC1-2
+
+[GND] (46)
+  BGND-1  C1-2  C10-1  C11-1  C12-1  C13-2  C14-2  C15-2  C2-2  C3-2  C4-2  C5-2  C7-1  C8-1  C9-1  FPC1-17  FPC1-25  FPC1-26  R1-2  R10-2  R17-1  R18-1  R19-1  R2-2  R20-2  R22-2  R3-1  R4-1  R5-1  R8-2  U1-19  U1-9  U2-2  U3-12  U3-15  U3-17  U3-4  U3-5  U3-8  U4-5  U5-1  U7-3  U8-7  U8-8  USB1-A1  USB1-A12
+
+[GPIO0] (3)
+  R12-1  U1-18  U8-5
+
+[GPIO1] (2)
+  U1-17  U7-5
+
+[GPIO10] (2)
+  R14-1  U1-10
+
+[GPIO18] (7)
+  FPC1-13  R16-2  R7-2  U1-13  U1-5  U2-5  U4-8
+
+[GPIO19] (7)
+  FPC1-14  R15-2  R6-2  U1-14  U1-4  U2-4  U4-7
+
+[GPIO2] (2)
+  FPC1-10  U1-16
+
+[GPIO20] (2)
+  U1-11  U7-2
+
+[GPIO21] (2)
+  U1-12  U7-1
+
+[GPIO7] (2)
+  U1-6  U4-3
+
+[GPIO9] (2)
+  R13-2  U1-8
+
+[P+] (5)
+  BAT+-1  C9-2  R9-1  U3-2  U3-3
+
+[RESE] (1)
+  FPC1-3
+
+[TSCL] (1)
+  FPC1-6
+
+[TSDA] (1)
+  FPC1-7
+
+[VBUS+] (5)
+  C6-1  C7-2  U2-1  USB1-A4  USB1-A9
+
+[VCOM] (2)
+  C4-1  FPC1-24
+
+[VGH] (2)
+  C13-1  FPC1-21
+
+[VGL] (2)
+  C14-1  FPC1-23
+
+[VSH1] (2)
+  C2-1  FPC1-20
+
+[VSH2] (2)
+  C5-1  FPC1-5
+
+[VSL] (2)
+  C3-1  FPC1-22

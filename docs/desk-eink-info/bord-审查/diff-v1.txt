@@ -1,0 +1,8 @@
+=== COMPONENT DIFF (baseline-v1 -> current-v1) ===
+
+=== PIN -> NET DIFF (baseline-v1 -> current-v1) ===
+
+=== NET-LEVEL DIFF (baseline-v1 -> current-v1) ===
+--- nets only in current (ADDED) ---
+--- nets only in baseline (REMOVED) ---
+--- common nets with different node sets ---

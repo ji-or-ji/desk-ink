@@ -1,0 +1,45 @@
+=== COMPONENT DIFF (baseline-v2 -> current-v2) ===
+- component R13  Res_0603 10K
+- component R14  Res_0603 10K
+~ component R3  Value: "10K" -> "1K" | Name: "10K" -> "1K"
+~ component R6  Value: "10K" -> "4.7K" | Name: "10K" -> "4.7K"
+~ component R7  Value: "10K" -> "4.7K" | Name: "10K" -> "4.7K"
+
+=== PIN -> NET DIFF (baseline-v2 -> current-v2) ===
+C1-1	$1N23	->	3V3
+C6-2	$1N171	->	GND
+FPC1-18	$1N23	->	3V3
+R13-1	3V3	->	(unconnected)
+R13-2	GPIO9	->	(unconnected)
+R14-1	GPIO10	->	(unconnected)
+R14-2	3V3	->	(unconnected)
+R7-2	GPIO18	->	SCL
+U1-10	GPIO10	->	(unconnected)
+U1-5	GPIO18	->	SCL
+U1-8	GPIO9	->	(unconnected)
+U2-1	VBUS+	->	3V3
+U2-5	GPIO18	->	SCL
+U3-13	$1N171	->	VBUS+
+U4-8	GPIO18	->	SCL
+
+=== NET-LEVEL DIFF (baseline-v2 -> current-v2) ===
+--- nets only in current (ADDED) ---
++ SCL (4) ["U2-5","U1-5","R7-2","U4-8"]
+--- nets only in baseline (REMOVED) ---
+- $1N171 (2) ["U3-13","C6-2"]
+- $1N23 (2) ["FPC1-18","C1-1"]
+- GPIO10 (2) ["U1-10","R14-1"]
+- GPIO9 (2) ["U1-8","R13-2"]
+--- common nets with different node sets ---
+~ 3V3
+    +added: ["FPC1-18","C1-1","U2-1"]
+    -removed: ["R13-1","R14-2"]
+~ GND
+    +added: ["C6-2"]
+    -removed: []
+~ GPIO18
+    +added: []
+    -removed: ["U2-5","U1-5","R7-2","U4-8"]
+~ VBUS+
+    +added: ["U3-13"]
+    -removed: ["U2-1"]
