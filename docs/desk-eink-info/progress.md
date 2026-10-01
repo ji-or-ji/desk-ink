@@ -44,7 +44,7 @@
 
 - [x] FPC 接插件选型（FPC-05F-24PH20 或兼容）
 - [x] Pin 5 VSH2 ── 1μF/25V ── GND（引脚不接地）
-- [x] Pin 8 BS1 → 3.3V（4 线 SPI）
+- [x] Pin 8 BS1 → GND（低电平 = 4 线 SPI）
 - [x] Pin 9 BUSY → GPIO 8
 - [x] Pin 10 RES# → GPIO 2
 - [x] Pin 11 D/C# → GPIO 3
