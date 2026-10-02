@@ -31,14 +31,27 @@
    尤其是引脚名、寄存器名、元件位号这种短字符串。
 
 9. **新工具从小处接入，不换主干。**（2026-10-02）
-   现在多了一个可调用的端：DeepSeek Harness（DSH），由自编插件 `hanako2dsh` 接入。
-   仓库：https://github.com/ji-or-ji/hanako2dsh （国内：https://githee.com/ji-or-ji/hanako2dsh ）
-   当前定位是**旁路**，不是替换：
 
-   - 先只交只读类的活（审图、读资料、核对），跑一轮看结果
-   - 验收过一轮再扩大范围，**别一上来就把主干交出去**
-   - 它默认只能写自己的一个工作区；要写别处先确认，别默认放行
-   - 信号：桥相关的工具是 `dsh-bridge_*` 那一组
+   已经多了一个可调用的端：本机的 **DeepSeek Harness（DSH）**，由自编插件 **Hanako2DSH** 接进 Hana。
+   仓库：https://github.com/ji-or-ji/hanako2dsh （国内：https://githee.com/ji-or-ji/hanako2dsh ）
+   本机安装位置：`C:\Users\<user>\.hanako\plugins\hanako2dsh`
+
+   **它给三样东西**（互不依赖，可以只用其中一件）：
+
+   - **镜像页签**：Hana 里开一个 DSH 页签，内层连的是**本机真跑着的 DSH 界面**（插件在本地架反向代理，保 Host、去 Origin、注入 cookie），HTTP 和 WebSocket 全透传。**是活界面，不是截图。**
+   - **派活**：把任务交给 DSH 的 headless 模式跑。默认**异步**，工具立刻返回「已派单」，跑完自动回到对话。工具名在 Hana 侧是 `dsh-bridge_*`，插件 README 里写 `hanako2dsh_*`。
+   - **侧栏时间线**：一次 DSH 会话一个窗口，实时列工具调用与输出，带状态灯和急停，重启不丢。
+
+   **两条必须先搞清楚的**：
+
+   - 它**不碰任何 API key**，用的是你自己那份 DSH 已经登录好的凭据（`~/.dsh/.credentials.yaml`）。
+   - 默认 `permissionMode = danger-full-access`：**DSH 侧不再弹审批，可以越界写文件。** headless 没有「问一下」这一档，只有放行或拒。想收紧就改成 `workspace-write` 或 `read-only`，也可以单次派活时覆盖。
+
+   **别和桌面端 DSH 同时抢**：两边共用同一份账号目录 `~/.dsh`（凭据、会话、锁都在里面），可能起不来。插件有退避保护，连续失败 5 次会停手。
+
+   它对接的是**官方开源那套**（`deepseek-ai/deepseek-harness`），第三方整合包、魔改壳不适配。
+
+   **定位还是旁路**：先交只读类的活（审图、读资料、核对），跑一轮看结果；验收过再扩大范围。**别一上来就把主干交出去。**
 
 ## 顶层
 
