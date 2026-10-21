@@ -161,8 +161,8 @@ HTTP 404
 [E14] 登录状态
 ============================================================
 C:\Users\<user>\Documents\LCEDA-Pro\lceda-pro-activation.txt
-  username: ***REDACTED***
-  customer_code: ***REDACTED***
+  username: <username>
+  customer_code: <customer_code>
 （已登录）
 
 ============================================================
